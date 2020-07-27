@@ -30,6 +30,7 @@ export default {
     width: 100%;
     height: 40px;
     top: 0;
+    z-index: 1000;
   }
   .container {
     display: flex;

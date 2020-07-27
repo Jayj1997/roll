@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <tab-header></tab-header>
-    <router-view/>
+    <router-view style="margin-bottom: 4.5rem"/>
+<!--  添加45px的margin来忽视tabBar-->
     <tab-bar @select-item="selectItem"></tab-bar>
   </div>
 </template>
@@ -29,11 +30,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import 'src/assets/css/global_layout.scss';
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-  }
+  @import '../src/assets/scss/main';
 </style>

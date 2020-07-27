@@ -48,8 +48,9 @@ export default {
 
 <style scoped>
   .tab-bar {
+    text-align: center;
     background-color: white;
-    height: 45px;
+    height: 4.5rem;
     /*border: 0 solid rgb(210, 210, 210);*/
     border-top-width: 1px;
     position: fixed;
@@ -60,7 +61,7 @@ export default {
   }
 
   .tab-bar-item {
-    height: 45px;
+    height: 4.5rem;
     margin-top: 4px;
   }
 

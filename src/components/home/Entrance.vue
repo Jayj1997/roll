@@ -52,24 +52,25 @@ export default {
 
 <style lang="scss" scoped>
   .roll {
-    margin-top: 40px;
+    text-align: center;
+    margin-top: 4rem;
     /*height: 100%;*/
     background-color: rgba(243, 234, 207, 0.5);
   }
 
   .cards-container {
-    padding-top: 15px;
+    padding-top: 1.5rem;
     /*display: flex;*/
     /*justify-content: center;*/
 
     .card-container {
-      margin: 0 auto 15px;
+      margin: 0 auto 1.5rem;
       width: 90%;
-      border-radius: 20px;
+      border-radius: 2rem;
       .word-wrap {
         color: #d3efff;
-        padding-top: 30px;
-        padding-bottom: 30px;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
       }
     }
   }
