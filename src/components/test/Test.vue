@@ -15,9 +15,41 @@
 
     <main>
       <section class="section-about">
-        <h2 class="heading-secondary">
-          Exciting tours for adventurous people
-        </h2>
+        <div class="u-center-text u-margin-bottom-big">
+          <h2 class="heading-secondary">
+            Exciting tours for adventurous people
+          </h2>
+        </div>
+        <div class="row-test">
+          <div class="col-1-of-2">
+            <h3 class="heading-tertiary u-margin-bottom-small">
+              Your're going to fall in love with nature
+            </h3>
+            <p class="paragraph">
+              Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione
+              iure, commodi in slt neque perspiciatis laudantinum omnis nemo doloribus nesciunt
+              ad earum debitis aspernatur recusandae est uno dolore!
+            </p>
+
+            <h3 class="heading-tertiary u-margin-bottom-small">
+              Live adventures like you never have before
+            </h3>
+            <p class="paragraph">
+              this is blank text that i dont know what to say but i have to full fill
+              this shit text and i tired to think about it and i dont have that blank
+              text generator okay?
+            </p>
+
+            <a href="#" class="btn-text">Learn more &rarr;</a>
+          </div>
+          <div class="col-1-of-2">
+            <div class="composition">
+              <img src="../../assets/images/test/nat-1-large.jpg" alt="Photo 1" class="composition__photo composition__photo--p1">
+              <img src="../../assets/images/test/nat-2-large.jpg" alt="Photo 2" class="composition__photo composition__photo--p2">
+              <img src="../../assets/images/test/nat-3-large.jpg" alt="Photo 3" class="composition__photo composition__photo--p3">
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 <!--
@@ -108,7 +140,7 @@ export default {
 
   .test {
     font-weight: 400;
-    font-size: 1.6rem;
+    font-size: $default-font-size;
     line-height: 1.7;
     color: #777;
     padding: 3rem;
@@ -145,35 +177,6 @@ export default {
       left: 50%;
       transform: translate(-50%, -50%); /* 让text-box绝对居中 */
       text-align: center;
-    }
-  }
-
-  .heading-primary {
-    color: $color-white;
-    text-transform: uppercase;
-    backface-visibility: hidden;  /* 解决动画抖动 */
-    margin-bottom: 6rem;
-
-    &--main {
-      display: block;
-      font-size: 6rem;
-      font-weight: 400;
-      letter-spacing: 3.5rem;
-      /*animation-name: moveInLeft;*/
-      /*animation-duration: 1s;*/
-      /*animation-timing-function: ease-in;*/
-      animation: moveInLeft 1s ease-out;
-
-      /*animation-iteration-count: 3;  执行几次*/
-      /*animation-delay: 3s;*/
-    }
-
-    &--sub {
-      display: block;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 1.75rem;
-      animation: moveInRight 1s ease-out;
     }
   }
 </style>
