@@ -63,8 +63,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract scss into its own file
     new MiniCssExtractPlugin({
-      filename: utils.assetsPath('scss/app.[name].scss'),
-      chunkFilename: utils.assetsPath('scss/app.[contenthash:12].scss')
+      filename: utils.assetsPath('css/app.[name].css'),
+      chunkFilename: utils.assetsPath('css/app.[contenthash:12].css')
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
