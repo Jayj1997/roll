@@ -51,6 +51,98 @@
           </div>
         </div>
       </section>
+
+      <section class="section-feature">
+        <div class="row-test">
+          <div class="col-1-of-4">
+            <div class="feature-box">
+              <i class="feature-box__icon fa fa-flash"></i>
+              <h3 class="heading-tertiary u-margin-bottom-small">explore the world</h3>
+              <p class="feature-box__text">
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis laudantinum omnis nemo doloribus
+              </p>
+            </div>
+          </div>
+
+          <div class="col-1-of-4">
+            <div class="feature-box">
+              <i class="feature-box__icon fa fa-compass"></i>
+              <h3 class="heading-tertiary u-margin-bottom-small">meet nature</h3>
+              <p class="feature-box__text">
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis laudantinum omnis nemo doloribus
+              </p>
+            </div>
+          </div>
+
+          <div class="col-1-of-4">
+            <div class="feature-box">
+              <i class="feature-box__icon fa fa-map-o"></i>
+              <h3 class="heading-tertiary u-margin-bottom-small">find your way</h3>
+              <p class="feature-box__text">
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis laudantinum omnis nemo doloribus
+              </p>
+            </div>
+          </div>
+
+          <div class="col-1-of-4">
+            <div class="feature-box">
+              <i class="feature-box__icon fa fa-heart-o"></i>
+              <h3 class="heading-tertiary u-margin-bottom-small">live a healthier life</h3>
+              <p class="feature-box__text">
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis laudantinum omnis nemo doloribus
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-tours">
+        <div class="u-center-text u-margin-bottom-big">
+          <h2 class="heading-secondary">
+            Most popular tours
+          </h2>
+        </div>
+
+        <div class="row-test">
+          <div class="col-1-of-3">
+            <div class="card">
+              <div class="card__side card__side--front">
+                <div class="card__picture card__picture--1">
+                  &nbsp;
+                </div>
+                <h4 class="card__heading">
+                  <span class="card__heading-span card__heading-span--1">the sea explore</span>
+                </h4>
+                <div class="card__details">
+                  <ul>
+                    <li>3 day tours</li>
+                    <li>Up to 30 people</li>
+                    <li>2 tour guides</li>
+                    <li>Sleep in cozy hotels</li>
+                    <li>Difficulty: easy</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card__side card__side--back card__side--back--1">
+                BACK
+              </div>
+            </div>
+          </div>
+          <div class="col-1-of-3">
+            <div class="card">
+              Card text1
+            </div>
+          </div>
+          <div class="col-1-of-3">
+            <div class="card">
+              Card text1
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 <!--
     <section class="grid-test">
@@ -159,6 +251,7 @@ export default {
     background-position: top;
     position: relative;
 
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
     clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
 
     &__logo-box {

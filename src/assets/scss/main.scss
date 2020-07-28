@@ -1,16 +1,18 @@
-@import '../../assets/scss/abstracts/functions';
-@import '../../assets/scss/abstracts/mixins';
-@import '../../assets/scss/abstracts/variables';
+@import 'abstracts/functions';
+@import 'abstracts/mixins';
+@import 'abstracts/variables';
 
-@import '../../assets/scss/base/base';
-@import '../../assets/scss/base/animations';
-@import '../../assets/scss/base/typography';
-@import '../../assets/scss/base/utilities';
+@import 'base/base';
+@import 'base/animations';
+@import 'base/typography';
+@import 'base/utilities';
 
-@import "../../assets/scss/components/button";
-@import "../../assets/scss/components/composition";
+@import "components/button";
+@import "components/composition";
+@import "components/feature-box";
+@import "components/card";
 
-@import '../../assets/scss/layout/layout';
-@import '../../assets/scss/layout/grid';
+@import 'layout/header';
+@import 'layout/grid';
 
-@import '../../assets/scss/pages/home';
+@import 'pages/home';
