@@ -127,18 +127,179 @@
                 </div>
               </div>
               <div class="card__side card__side--back card__side--back--1">
-                BACK
+                <div class="card__cta">
+                  <div class="card__price-box">
+                    <p class="card__price-only">
+                      Only
+                    </p>
+                    <p class="card__price-value">
+                      $297
+                    </p>
+                  </div>
+                  <a href="#" class="btn btn--white">Book Now！</a>
+                </div>
               </div>
             </div>
           </div>
+
           <div class="col-1-of-3">
             <div class="card">
-              Card text1
+              <div class="card__side card__side--front">
+                <div class="card__picture card__picture--2">
+                  &nbsp;
+                </div>
+                <h4 class="card__heading">
+                  <span class="card__heading-span card__heading-span--2">
+                    the forest hiker</span>
+                </h4>
+                <div class="card__details">
+                  <ul>
+                    <li>7 days tour</li>
+                    <li>Up to 40 people</li>
+                    <li>6 tour guides</li>
+                    <li>Sleep in provided tents</li>
+                    <li>Difficulty: medium</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card__side card__side--back card__side--back--2">
+                <div class="card__cta">
+                  <div class="card__price-box">
+                    <p class="card__price-only">
+                      Only
+                    </p>
+                    <p class="card__price-value">
+                      $467
+                    </p>
+                  </div>
+                  <a href="#" class="btn btn--white">Book Now！</a>
+                </div>
+              </div>
             </div>
           </div>
+
           <div class="col-1-of-3">
             <div class="card">
-              Card text1
+              <div class="card__side card__side--front">
+                <div class="card__picture card__picture--3">
+                  &nbsp;
+                </div>
+                <h4 class="card__heading">
+                  <span class="card__heading-span card__heading-span--3">
+                    the snow adventurer</span>
+                </h4>
+                <div class="card__details">
+                  <ul>
+                    <li>5 days tours</li>
+                    <li>Up to 15 people</li>
+                    <li>3 tour guides</li>
+                    <li>Sleep in cozy hotels</li>
+                    <li>Difficulty: hard</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card__side card__side--back card__side--back--3">
+                <div class="card__cta">
+                  <div class="card__price-box">
+                    <p class="card__price-only">
+                      Only
+                    </p>
+                    <p class="card__price-value">
+                      $897
+                    </p>
+                  </div>
+                  <a href="#" class="btn btn--white">Book Now！</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-center-text u-margin-top-huge">
+          <a href="#" class="btn btn--green">Discover all tours</a>
+        </div>
+      </section>
+
+      <section class="section-stories">
+        <div class="bg-video">
+          <video class="bg-video__content" autoplay muted loop>
+            <source src="~@/assets/images/test/video.mp4" type="video/mp4">
+            <source src="~@/assets/images/test/video.webm" type="video/webm">
+            你的浏览器不支持播放视频，请更新您的浏览器
+          </video>
+        </div>
+        <div class="u-center-text u-margin-bottom-big">
+          <h2 class="heading-secondary">
+            We make people genuinely happy
+          </h2>
+        </div>
+
+        <div class="row-test">
+          <div class="story">
+            <figure class="story__shape">
+              <img src="~@/assets/images/test/nat-8.jpg" class="story__image" alt="person on a tour">
+              <figcaption class="story__caption">Mary Smith</figcaption>
+            </figure>
+
+            <div class="story__text">
+              <h3 class="heading-tertiary u-margin-bottom-small">
+                I had the best week ever with my family
+              </h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatisLorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatisLorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-test">
+          <div class="story">
+            <figure class="story__shape">
+              <img src="~@/assets/images/test/nat-9.jpg" class="story__image" alt="person on a tour">
+              <figcaption class="story__caption">Jack Wilson
+              </figcaption>
+            </figure>
+
+            <div class="story__text">
+              <h3 class="heading-tertiary u-margin-bottom-small">
+                WOW! My life is completely different now!
+              </h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatisLorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatisLorem ipsum dolor sit amet, consectrtur adipisicing elit, Ratione iure,
+                commodi in slt neque perspiciatis
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="u-center-text u-margin-top-huge">
+          <a href="#" class="btn-text">Read all stories &rarr;</a>
+        </div>
+      </section>
+
+      <section class="section-book">
+        <div class="row-test">
+          <div class="book">
+            <div class="book__form">
+              <form action="#" class="form">
+                <div class="u-margin-bottom-medium">
+                  <h2 class="heading-secondary">
+                    Start Booking Now
+                  </h2>
+                </div>
+                <div class="form__group">
+                  <input type="text" class="form__input" id="name" placeholder="我该怎么称呼你呢？" required>
+                  <label for="name" class="form__label">全称</label>
+                </div>
+                <div class="form__group">
+                  <input type="email" class="form__input" id="email" placeholder="邮箱" required>
+                  <label for="email" class="form__label">邮箱</label>
+                </div>
+              </form>
             </div>
           </div>
         </div>
