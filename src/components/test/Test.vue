@@ -1,5 +1,24 @@
 <template>
   <div class="test">
+    <div class="navigation">
+      <input type="checkbox" class="navigation__checkbox" id="navi-toggle">
+
+      <label for="navi-toggle" class="navigation__button u-shadow-y-light">
+        <span class="navigation__icon">&nbsp;</span>
+      </label>
+
+      <div class="navigation__background">&nbsp;</div>
+
+      <nav class="navigation__nav">
+        <ul class="navigation__list">
+          <li class="navigation__item"><a href="#" class="navigation__link"><span>01</span>About Natous</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link"><span>02</span>Your benefits</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link"><span>03</span>Popular tours</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link"><span>04</span>Stories</a></li>
+          <li class="navigation__item"><a href="#" class="navigation__link"><span>05</span>Book now</a></li>
+        </ul>
+      </nav>
+    </div>
     <header class="header">
       <div class="header__logo-box">
         <img :src="HeaderLogoSource" alt="Logo" class="header__logo">
@@ -99,7 +118,7 @@
           </div>
         </div>
       </section>
-      <section class="section-tours">
+      <section class="section-tours" id="section-tours">
         <div class="u-center-text u-margin-bottom-big">
           <h2 class="heading-secondary">
             Most popular tours
@@ -136,7 +155,7 @@
                       $297
                     </p>
                   </div>
-                  <a href="#" class="btn btn--white">Book Now！</a>
+                  <a href="#popup" class="btn btn--white">Book Now！</a>
                 </div>
               </div>
             </div>
@@ -172,7 +191,7 @@
                       $467
                     </p>
                   </div>
-                  <a href="#" class="btn btn--white">Book Now！</a>
+                  <a href="#popup" class="btn btn--white">Book Now！</a>
                 </div>
               </div>
             </div>
@@ -208,7 +227,7 @@
                       $897
                     </p>
                   </div>
-                  <a href="#" class="btn btn--white">Book Now！</a>
+                  <a href="#popup" class="btn btn--white">Book Now！</a>
                 </div>
               </div>
             </div>
@@ -300,11 +319,79 @@
                   <label for="email" class="form__label">邮箱</label>
                 </div>
               </form>
+              <div class="form__group u-margin-bottom-medium">
+                <div class="form__radio-group">
+                  <input type="radio" id="small" class="form__radio-input" name="size" >
+                  <label for="small" class="form__radio-label">
+                    <span class="form__radio-button"></span>
+                    Small tour group</label>
+                </div>
+
+                <div class="form__radio-group">
+                  <input type="radio" id="large" class="form__radio-input" name="size">
+                  <label for="large" class="form__radio-label">
+                    <span class="form__radio-button"></span>
+                    large tour group</label>
+                </div>
+              </div>
+              <div class="form__group">
+                <button class="btn btn--green">Next step &rarr;</button>
+              </div>
+
             </div>
           </div>
         </div>
       </section>
     </main>
+    <footer class="footer">
+      <div class="footer__logo-box">
+        <img src="~@/assets/images/test/logo-green-2x.png" alt="Full-logo" class="footer__logo">
+      </div>
+      <div class="row-test">
+        <div class="col-1-of-2">
+          <div class="footer__navigation">
+            <ul class="footer__list">
+              <li class="footer__item"><a href="#" class="footer__link">Company</a></li>
+              <li class="footer__item"><a href="#" class="footer__link">Contact Us</a></li>
+              <li class="footer__item"><a href="#" class="footer__link">Carrers</a></li>
+              <li class="footer__item"><a href="#" class="footer__link">Privacy policy</a></li>
+              <li class="footer__item"><a href="#" class="footer__link">Terms</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-1-of-2">
+          <p class="footer__copyright">
+            Build by <a href="" class="footer__link">Jay</a> for his online <a class="footer__link">Advanced CSS and Sass</a>.
+            Copyright &copy; by Jay. You are 100% allowed to use this webpage for both personal and commercial use, but Not to
+            claim it as your onw design, A credit to the original author, Jay, is of course highly appreciated!
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <div class="popup" id="popup">
+      <div class="popup__content u-shadow-y-light">
+        <div class="popup__left">
+          <img src="~@/assets/images/test/nat-8.jpg" alt="Tour photo" class="popup__img">
+          <img src="~@/assets/images/test/nat-9.jpg" alt="Tour photo" class="popup__img">
+        </div>
+        <div class="popup__right">
+          <a href="#section-tours" class="popup__close">&times;</a>
+          <h2 class="heading-secondary u-margin-bottom-medium">Start booking now</h2>
+          <h3 class="heading-tertiary u-margin-bottom-small">Important &ndash; Please read these terms before booking</h3>
+          <p class="popup__text">
+            this is another text that i dont know what to say, and i dont have a text generator so i just randomly text this,
+            i dont wanna waste my brain to think what to text and is correct spell, so maybe there is some stupid mistake, forgive me for this okay ?
+            the fact is that lines of text may seem short so i double it or morethis is another text that i dont know what to say, and i dont have a text generator so i just randomly text this,
+            i dont wanna waste my brain to think what to text and is correct spell, so maybe there is some stupid mistake, forgive me for this okay ?
+            the fact is that lines of text may seem short so i double it or morethis is another text that i dont know what to say, and i dont have a text generator so i just randomly text this,
+            i dont wanna waste my brain to think what to text and is correct spell, so maybe there is some stupid mistake, forgive me for this okay ?
+            the fact is that lines of text may seem short so i double it or more
+          </p>
+          <a href="#" class="btn btn--green">Book now</a>
+        </div>
+      </div>
+    </div>
 <!--
     <section class="grid-test">
       <div class="row-test">
@@ -396,9 +483,6 @@ export default {
     font-size: $default-font-size;
     line-height: 1.7;
     color: #777;
-    padding: 3rem;
-    box-sizing: border-box;
-    /*margin-bottom: 45px;*/
   }
 
   .header {
@@ -412,8 +496,11 @@ export default {
     background-position: top;
     position: relative;
 
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
     clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+
+    @include respond(phone) {
+      clip-path: polygon(0 0, 100% 0, 100% 85vh, 0 100%);
+    }
 
     &__logo-box {
       position: absolute;
