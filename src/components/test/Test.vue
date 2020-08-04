@@ -345,7 +345,14 @@
     </main>
     <footer class="footer">
       <div class="footer__logo-box">
-        <img src="~@/assets/images/test/logo-green-2x.png" alt="Full-logo" class="footer__logo">
+        <picture class="footer__logo">
+          <source srcset="~@/assets/images/test/logo-green-small-1x.png 1x, ~@/assets/images/test/logo-green-small-2x.png 2x"
+                  media="(max-width: 37.5em)">
+          <img srcset="~@/assets/images/test/logo-green-1x.png 1x, ~@/assets/images/test/logo-green-2x.png 2x" alt="Full logo">
+        </picture>
+
+<!--        62-->
+
       </div>
       <div class="row-test">
         <div class="col-1-of-2">
