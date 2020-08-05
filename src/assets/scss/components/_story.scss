@@ -30,15 +30,22 @@
     -webkit-shape-outside: circle(50% at 50% 50%);
     shape-outside: circle(50% at 50% 50%); // size -> left top
     // shape必须设置长宽和float 辣鸡
-    clip-path: circle(50% at 50% 50%);
     transform: translate(-3rem) skewX(12deg);
     // float的block最好使用transform而不是margin etc
     position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+
+    @supports (clip-path: polygon(0 0)) {
+      clip-path: circle(50% at 50% 50%);
+      border-radius: 0;
+    }
 
     @include respond(phone) {
       transform: translate(-3rem) skewX(0);
     }
   }
+  // 65
 
   &__image {
     height: 100%;

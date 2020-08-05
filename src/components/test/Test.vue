@@ -63,9 +63,21 @@
           </div>
           <div class="col-1-of-2">
             <div class="composition">
-              <img src="../../assets/images/test/nat-1-large.jpg" alt="Photo 1" class="composition__photo composition__photo--p1">
-              <img src="../../assets/images/test/nat-2-large.jpg" alt="Photo 2" class="composition__photo composition__photo--p2">
-              <img src="../../assets/images/test/nat-3-large.jpg" alt="Photo 3" class="composition__photo composition__photo--p3">
+              <img srcset="~@/assets/images/test/nat-1.jpg 300w, ~@/assets/images/test/nat-1-large.jpg 1000w"
+                   sizes="(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px" alt="photo 1"
+                   class="composition__photo composition__photo--p1" src="~@/assets/images/test/nat-1-large.jpg">
+
+              <img srcset="~@/assets/images/test/nat-2.jpg 300w, ~@/assets/images/test/nat-2-large.jpg 1000w"
+                   sizes="(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px" alt="photo 2"
+                   class="composition__photo composition__photo--p2" src="~@/assets/images/test/nat-2-large.jpg">
+
+              <img srcset="~@/assets/images/test/nat-3.jpg 300w, ~@/assets/images/test/nat-3-large.jpg 1000w"
+                   sizes="(max-width: 56.25em) 20vw, (max-width: 37.5em) 30vw, 300px" alt="photo 3"
+                   class="composition__photo composition__photo--p3" src="~@/assets/images/test/nat-3-large.jpg">
+
+<!--              <img  alt="Photo 1" >-->
+<!--              <img src="../../assets/images/test/nat-2-large.jpg" alt="Photo 2" class="composition__photo composition__photo&#45;&#45;p2">-->
+<!--              <img src="../../assets/images/test/nat-3-large.jpg" alt="Photo 3" class="composition__photo composition__photo&#45;&#45;p3">-->
             </div>
           </div>
         </div>
@@ -348,7 +360,7 @@
         <picture class="footer__logo">
           <source srcset="~@/assets/images/test/logo-green-small-1x.png 1x, ~@/assets/images/test/logo-green-small-2x.png 2x"
                   media="(max-width: 37.5em)">
-          <img srcset="~@/assets/images/test/logo-green-1x.png 1x, ~@/assets/images/test/logo-green-2x.png 2x" alt="Full logo">
+          <img srcset="~@/assets/images/test/logo-green-1x.png 1x, ~@/assets/images/test/logo-green-2x.png 2x" alt="Full logo" src="~@/assets/images/test/logo-green-small-2x.png">
         </picture>
 
 <!--        62-->
@@ -493,17 +505,32 @@ export default {
   }
 
   .header {
-    height: 95vh;
+    height: 85vh;
     background-image: linear-gradient(
         to right bottom,
         rgba($color-primary-light, 0.8),
         rgba($color-primary-dark, 0.8)),
-    url(../../assets/images/test/hero.jpg);
+    url(../../assets/images/test/hero-small.jpg);
     background-size: cover;
     background-position: top;
     position: relative;
 
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    @supports (clip-path: polygon(0 0)) or (-webkit-clip-path: polygon(0 0)) {
+      clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+      height: 95vh;
+    /* 现在有autoprefixer了 不再需要手动加webkit了 */
+    }
+
+    @media (min-resolution: 192dpi) and (min-width: 37.5em),
+    (-webkit-min-device-pixel-ratio: 2) and (min-width: 37.5em),
+    (min-width: 125em) {
+      background-image: linear-gradient(
+          to right bottom,
+          rgba($color-primary-light, 0.8),
+          rgba($color-primary-dark, 0.8)),
+      url(../../assets/images/test/hero.jpg);
+    }
 
     @include respond(phone) {
       clip-path: polygon(0 0, 100% 0, 100% 85vh, 0 100%);
