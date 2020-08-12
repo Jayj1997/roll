@@ -4,17 +4,19 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import common from './common'
-
+import Vuetify from 'vuetify'
+import vuetify from './plugins/vuetify'
 import $ from 'jquery'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min.js'
 import 'font-awesome/css/font-awesome.min.css'
+
+Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 Vue.prototype.$common = common
 
-/* eslint-disable no-new */
+// eslint-disable-next-line no-new
 new Vue({
+  vuetify,
   el: '#app',
   router,
   components: { App },

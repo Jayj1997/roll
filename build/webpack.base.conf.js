@@ -84,7 +84,19 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ['style', 'css', 'sass']
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+              fiber: require('fibers'),
+              indentedSyntax: true
+            },
+          }
+        ]
+        // loader: ['style', 'css', 'sass']
       }
     ]
   },

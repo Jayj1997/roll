@@ -1,34 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home/Entrance.vue'
-import Function from '@/components/function/Function.vue'
-import Mine from '@/components/mine/Mine.vue'
-import Test from '@/components/test/Test.vue'
+import user from './user'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: Home
+      path: '*',
+      redirect: '/register'
     },
-    {
-      path: '/function',
-      name: 'Function',
-      component: Function
-    },
-    {
-      path: '/mine',
-      name: 'Mine',
-      component: Mine
-    },
-    {
-      path: '/test', // 测试url
-      name: 'Test',
-      component: Test
-    }
+    ...user // 用户模块
   ]
 })
+
+const defaultTitle = 'Dice'
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title : defaultTitle
+  next()
+})
+
+export default router
