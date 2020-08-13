@@ -25,9 +25,50 @@ html {
 
 body {
   box-sizing: border-box;
-  padding: 3rem;
   //
   //@include respond(tab-port) {
   //  padding: 0;
   //}
+}
+
+@font-face {
+  font-family: 'mashanzheng';
+  src: url('~@/assets/fonts/mashanzheng/MaShanZheng-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo_tamma';
+  src: url('~@/assets/fonts/Baloo_tamma/BalooTamma2-Regular.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo_tamma';
+  src: url('~@/assets/fonts/Baloo_tamma/BalooTamma2-Medium.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo_tamma';
+  src: url('~@/assets/fonts/Baloo_tamma/BalooTamma2-SemiBold.ttf');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo_tamma';
+  src: url('~@/assets/fonts/Baloo_tamma/BalooTamma2-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Baloo_tamma';
+  src: url('~@/assets/fonts/Baloo_tamma/BalooTamma2-ExtraBold.ttf');
+  font-weight: 800;
+  font-style: normal;
 }
