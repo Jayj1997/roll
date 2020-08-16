@@ -12,13 +12,13 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "font-awesome": "^4.7.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^2.3.8",
     "vux": "^2.9.4"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",

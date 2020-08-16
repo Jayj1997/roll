@@ -3,7 +3,7 @@
     <div class="header">
       <div class="bg-video" style="padding-bottom: 40vh">
         <video class="bg-video__content" autoplay muted loop>
-          <source src="~@/assets/images/register/bg-video-test-2.mp4" type="video/mp4">
+          <source src="~@/assets/images/register/bg-video.mp4" type="video/mp4">
           你的浏览器不支持播放视频，请更新您的浏览器
         </video>
       </div>
@@ -18,16 +18,6 @@
       </div>
       <div class="header__blur"></div>
     </div>
-    <div class="sign-in">
-      <input type="checkbox" class="sign-in__checkbox" id="sign-in__checkbox">
-      <label for="sign-in__checkbox" class="sign-in__button">
-        <span class="sign-in__icon">加入我们</span>
-      </label>
-      <div class="sign-in__background">&nbsp;</div>
-      <div class="sign-in__content">
-        1
-      </div>
-    </div>
     <div class="body">
       <div class="body__content">
         <div class="body__content--title">欢迎来到Dice</div>
@@ -39,6 +29,42 @@
         <span>已经加入我们了？<a href="#" style="text-decoration: none; color: white">点击登录 &rarr;</a></span>
       </div>
     </div>
+    <div class="sign-in">
+      <input type="checkbox" class="sign-in__checkbox" checked="checked" id="sign-in__checkbox">
+      <label for="sign-in__checkbox" class="sign-in__button">
+        <span class="sign-in__icon">加入我们</span>
+      </label>
+      <div class="sign-in__background">&nbsp;</div>
+      <div class="sign-in__content">
+        <div class="sign-in__header">
+          <div class="sign-in__header--title">
+            <span>Dice</span>
+          </div>
+          <div class="sign-in__header--form">
+            <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+              <v-text-field v-model="name" :counter="10" height="5rem"
+                            :rules="nameRules" label="昵称" filled shaped clearable
+                            required></v-text-field>
+              <v-text-field v-model="email" :counter="30" height="5rem"
+                            :rules="emailRules" label="邮箱" filled shaped clearable
+                            required></v-text-field>
+              <v-text-field v-model="password" height="5rem"
+                            :rules="emailRules" label="密码" filled shaped clearable
+                            required></v-text-field>
+            </v-form>
+          </div>
+        </div>
+        <div class="sign-in__body">
+          <div class="sign-in__body--buttons">
+          </div>
+          <div class="sign-in__body--footer">
+            Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">JayJ</a> for his online todo app Roll&Dice,
+            Copyright &copy; by Jayj; you're are free and allowed to use this webpage for both study and commercial purposes, but
+            Not to claim it as your own design.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,6 +72,19 @@
 export default {
   data () {
     return {
+      name: '',
+      nameRules: [
+        v => !!v || '要告诉我如何称呼你哦',
+        v => (v && v.length <= 10) || '名字太长称呼起来会累'
+      ],
+      email: '',
+      emailRules: [
+        v => !!v || '没有联系方式就无法通知你了',
+        v => /.+@.+\..+/.test(v) || '填错了联系方式就无法通知你了'
+      ],
+      password: '',
+      valid: true,
+      lazy: false,
       desc: {
         desc1: '总是忘记自己要做什么，又厌烦了在纸上列出条条框框，想要一个强大的TODO应用来时刻记录自己将要做的事情、学习计划或者是财富增长？' +
           '又是否厌烦了那些来自上个世纪的老旧页面？ 加入我们，为您提供人性化的图形界面、丰富的记录功能和紧随潮流的页面样式。 ——Dice'
@@ -56,12 +95,21 @@ export default {
         {id: 3, title: '财富', image: require('@/assets/images/register/wealth.jpg'), text: '还没想好'}
       ]
     }
+  },
+  methods: {
+    validate () {
+      this.$refs.form.validate()
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   @import '../../assets/scss/main';
+
+  >>> .v-text-field__details {
+    overflow: visible;
+  }
 
   .register {
     position: relative;
@@ -171,11 +219,6 @@ export default {
       display: none;
     }
 
-    &__checkbox:checked + &__button &__icon {
-      background-color: transparent; // 选中之后button和icon继承父背景颜色 = 消失
-      color: transparent;
-    }
-
     &__background {
       height: 70px;
       width: 70px;
@@ -201,16 +244,6 @@ export default {
       transition: all .8s ease;
     }
 
-    &__checkbox:checked ~ &__background {
-      transform: scale(20);
-      opacity: 1;
-    }
-
-    &__checkbox:checked ~ &__content {
-      opacity: 1;
-      width: 100%;
-    }
-
     &__button {
       animation: moveInBottom 1s ease-out;
       position: absolute;
@@ -232,5 +265,73 @@ export default {
       font-size: 1.2rem;
       font-weight: 600;
     }
+
+    &__header {
+      height: 60vh;
+      width: 100%;
+      background-color: $color-primary;
+      position: relative;
+
+      &--title {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        span {
+          font-size: 6rem;
+          letter-spacing: 1rem;
+        }
+      }
+
+      &--form {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        width: 70%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &__body {
+      height: 40vh;
+      width: 100%;
+      background-color: $color-secondary;
+      position: relative;
+      &--footer {
+        color: $color-quartus;
+        margin: 0 5%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 1rem;
+        line-height: 1rem;
+      }
+
+      &--link {
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: $color-primary;
+      }
+    }
+
+    &__checkbox:checked + &__button &__icon {
+      background-color: transparent; // 选中之后button和icon继承父背景颜色 = 消失
+      color: transparent;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &__checkbox:checked ~ &__background {
+      transform: scale(20);
+      opacity: 1;
+    }
+
+    &__checkbox:checked ~ &__content {
+      opacity: 1;
+      width: 100%;
+      z-index: 3000;
+    }
+
   }
 </style>

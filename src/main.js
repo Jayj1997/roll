@@ -7,7 +7,7 @@ import common from './common'
 import Vuetify from 'vuetify'
 import vuetify from './plugins/vuetify'
 import $ from 'jquery'
-import 'font-awesome/css/font-awesome.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 Vue.use(Vuetify)
 
