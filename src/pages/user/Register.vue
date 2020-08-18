@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="sign-in">
-      <input type="checkbox" class="sign-in__checkbox" checked="checked" id="sign-in__checkbox">
+      <input type="checkbox" class="sign-in__checkbox" id="sign-in__checkbox">
       <label for="sign-in__checkbox" class="sign-in__button">
         <span class="sign-in__icon">加入我们</span>
       </label>
@@ -58,9 +58,8 @@
           <div class="sign-in__body--buttons">
           </div>
           <div class="sign-in__body--footer">
-            Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">JayJ</a> for his online todo app Roll&Dice,
-            Copyright &copy; by Jayj; you're are free and allowed to use this webpage for both study and commercial purposes, but
-            Not to claim it as your own design.
+            Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice,
+            Copyright &copy; by Jay.
           </div>
         </div>
       </div>
@@ -107,7 +106,7 @@ export default {
 <style lang="scss" scoped>
   @import '../../assets/scss/main';
 
-  >>> .v-text-field__details {
+  >>> .v-text-field__details, .v-label{
     overflow: visible;
   }
 
@@ -170,7 +169,7 @@ export default {
     color: $color-primary;
 
     &__content {
-      height: 30vh;
+      height: 40vh;
       padding: 15% 10%;
       opacity: 0;
       animation: moveInBottom 1s ease-out .5s forwards;
@@ -267,7 +266,7 @@ export default {
     }
 
     &__header {
-      height: 60vh;
+      height: 70vh;
       width: 100%;
       background-color: $color-primary;
       position: relative;
@@ -294,7 +293,7 @@ export default {
     }
 
     &__body {
-      height: 40vh;
+      height: 30vh;
       width: 100%;
       background-color: $color-secondary;
       position: relative;
@@ -304,8 +303,12 @@ export default {
         position: absolute;
         bottom: 0;
         left: 0;
-        font-size: 1rem;
+        font-size: 1.3rem;
         line-height: 1rem;
+
+        a {
+          font-size: 1.5rem;
+        }
       }
 
       &--link {
@@ -328,9 +331,10 @@ export default {
     }
 
     &__checkbox:checked ~ &__content {
-      opacity: 1;
+      opacity: 0;
       width: 100%;
       z-index: 3000;
+      animation: moveInLeft 1s ease-out .2s forwards;
     }
 
   }
