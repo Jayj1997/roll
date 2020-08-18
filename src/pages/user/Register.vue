@@ -44,22 +44,47 @@
             <v-form ref="form" v-model="valid" :lazy-validation="lazy">
               <v-text-field v-model="name" :counter="10" height="5rem"
                             :rules="nameRules" label="昵称" filled shaped clearable
+                            clear-icon="fas fa-times"
                             required></v-text-field>
               <v-text-field v-model="email" :counter="30" height="5rem"
                             :rules="emailRules" label="邮箱" filled shaped clearable
+                            clear-icon="fas fa-times"
                             required></v-text-field>
               <v-text-field v-model="password" height="5rem"
-                            :rules="emailRules" label="密码" filled shaped clearable
+                            :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
+                            :type="showP ? 'text' : 'password'"
+                            hint="最少八个字符数字/密码/组合" class="input-group--focused"
+                            @click:append="showP = !showP"
+                            :rules="passwordRules" label="密码" filled shaped
+                            style="font-size: 1.6rem"
                             required></v-text-field>
             </v-form>
           </div>
         </div>
         <div class="sign-in__body">
           <div class="sign-in__body--buttons">
+            <div class="sign-in__body--checkboxes">
+              <v-select
+                v-model="informDefault"
+                background-color="white"
+                class="text-body-1"
+                :items="informWay"
+                item-text="state"
+                item-value="value"
+                label="请选一种提醒规律"
+                append-icon="far fa-surprise"
+                solo></v-select>
+            </div>
+            <v-btn
+              :loading="loading"
+              :disabled="loading"
+              class="ma-5 primary sign-in__body--commit"
+              @click="commit"
+            >注册 <v-icon right dark>fas fa-cloud</v-icon></v-btn>
           </div>
           <div class="sign-in__body--footer">
-            Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice,
-            Copyright &copy; by Jay.
+            Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice&copy;,
+            Copyright by Jay.
           </div>
         </div>
       </div>
@@ -71,9 +96,17 @@
 export default {
   data () {
     return {
+      loading: false,
+      informDefault: {state: '弱提醒——每日6点发送计划', value: 2},
+      informWay: [
+        {state: '完全不提醒——计划完全靠自律', value: 1},
+        {state: '弱提醒——每日6点发送计划', value: 2},
+        {state: '强提醒——我么的自律:o', value: 3}
+      ],
+      showP: false, // 默认不显示密码
       name: '',
       nameRules: [
-        v => !!v || '要告诉我如何称呼你哦',
+        v => !!v || '要告诉我如何称呼你啊',
         v => (v && v.length <= 10) || '名字太长称呼起来会累'
       ],
       email: '',
@@ -82,6 +115,10 @@ export default {
         v => /.+@.+\..+/.test(v) || '填错了联系方式就无法通知你了'
       ],
       password: '',
+      passwordRules: [
+        value => !!value || '要填密码哦',
+        v => v.length >= 8 || '好歹填八个啊？'
+      ],
       valid: true,
       lazy: false,
       desc: {
@@ -98,6 +135,9 @@ export default {
   methods: {
     validate () {
       this.$refs.form.validate()
+    },
+    commit () {
+      this.loading = true
     }
   }
 }
@@ -106,9 +146,13 @@ export default {
 <style lang="scss" scoped>
   @import '../../assets/scss/main';
 
-  >>> .v-text-field__details, .v-label{
-    overflow: visible;
-  }
+  >>> .v-text-field__details{overflow: visible;}
+
+  >>> .v-label {overflow: visible;}
+
+  >>> .v-icon.v-icon {font-size: 1.5rem}
+
+  >>> .theme--light.v-application { background: transparent }
 
   .register {
     position: relative;
@@ -250,7 +294,7 @@ export default {
       right: 10%;
       height: 70px;
       width: 70px;
-      background-color: #552411;
+      background-color: $color-red;
       z-index: 2000;
       border-radius: 1000px;
     }
@@ -298,17 +342,33 @@ export default {
       background-color: $color-secondary;
       position: relative;
       &--footer {
+        word-break: break-all;
         color: $color-quartus;
-        margin: 0 5%;
+        margin: 5px 5%;
         position: absolute;
         bottom: 0;
         left: 0;
         font-size: 1.3rem;
         line-height: 1rem;
-
         a {
           font-size: 1.5rem;
         }
+      }
+
+      &--buttons {
+        padding: 3rem 0;
+        margin: 0 auto;
+        width: 70%;
+        height: 25vh;
+      }
+
+      &--commit {
+        position: absolute;
+        top: 55%;
+        left: 45%;
+        transform: translate(-50%, -50%); // 为什么不居中？
+        width: 50%;
+
       }
 
       &--link {
