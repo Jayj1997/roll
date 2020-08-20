@@ -153,13 +153,14 @@ export default {
       let params = {name: vm.name, email: vm.email, password: vm.password}
       vm.loadingButton = true
       user.register(params).then(
-        ({body: {token, account}}) => {
-
+        // ({body: {token, account}}) => {
+        ({body}) => {
+          console.log(body)
         }
       ).catch(
-        // (error) => {
-        //
-        // }
+        (error) => {
+          console.log(error)
+        }
       ).finally(() => {
         vm.loadingButton = false
       })
