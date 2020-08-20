@@ -42,21 +42,25 @@
           </div>
           <div class="sign-in__header--form">
             <v-form ref="form" v-model="valid" :lazy-validation="lazy">
-              <v-text-field v-model="name" :counter="10" height="5rem"
-                            :rules="nameRules" label="昵称" filled shaped clearable
-                            clear-icon="fas fa-times"
+              <v-text-field v-model="name" background-color="white" :counter="10" height="5rem"
+                            :rules="nameRules" label="昵称" filled shaped clearable :loading="loadingName"
+                            clear-icon="fas fa-times" @focus="loadingName = !loadingName"
+                            validate-on-blur
                             required></v-text-field>
-              <v-text-field v-model="email" :counter="30" height="5rem"
-                            :rules="emailRules" label="邮箱" filled shaped clearable
-                            clear-icon="fas fa-times"
+              <v-text-field v-model="email" background-color="white" :counter="30" height="5rem"
+                            :rules="emailRules" label="邮箱" filled shaped clearable :loading="loadingEmail"
+                            clear-icon="fas fa-times" @focus="loadingEmail = !loadingEmail"
+                            :error="errorEmail" :error-messages="errorEmail? '邮箱已经被注册了': ''"
+                            validate-on-blur
                             required></v-text-field>
-              <v-text-field v-model="password" height="5rem"
+              <v-text-field v-model="password" background-color="white" height="5rem"
                             :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
                             :type="showP ? 'text' : 'password'"
-                            hint="最少八个字符数字/密码/组合" class="input-group--focused"
+                            hint="最少八个字符数字/密码/." class="input-group--focused"
                             @click:append="showP = !showP"
                             :rules="passwordRules" label="密码" filled shaped
-                            style="font-size: 1.6rem"
+                            :loading="loadingPassword" @focus="loadingPassword = !loadingPassword"
+                            style="font-size: 1.6rem" validate-on-blur
                             required></v-text-field>
             </v-form>
           </div>
@@ -76,11 +80,11 @@
                 solo></v-select>
             </div>
             <v-btn
-              :loading="loading"
-              :disabled="loading"
-              class="ma-5 primary sign-in__body--commit"
+              :loading="loadingButton"
+              :disabled="loadingButton"
+              class="primary sign-in__body--commit"
               @click="commit"
-            >注册 <v-icon right dark>fas fa-cloud</v-icon></v-btn>
+            >注册<v-icon right dark>fas fa-cloud</v-icon></v-btn>
           </div>
           <div class="sign-in__body--footer">
             Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice&copy;,
@@ -93,10 +97,16 @@
 </template>
 
 <script>
+import user from '@/methods/user'
+
 export default {
   data () {
     return {
-      loading: false,
+      loadingButton: false,
+      loadingName: true,
+      loadingEmail: true,
+      loadingPassword: true,
+      errorEmail: false,
       informDefault: {state: '弱提醒——每日6点发送计划', value: 2},
       informWay: [
         {state: '完全不提醒——计划完全靠自律', value: 1},
@@ -116,13 +126,14 @@ export default {
       ],
       password: '',
       passwordRules: [
-        value => !!value || '要填密码哦',
+        v => !!v || '要填密码哦',
+        v => !!/[a-zA-Z0-9.]/.test(v) || '密码仅限于数字/字母/.',
         v => v.length >= 8 || '好歹填八个啊？'
       ],
       valid: true,
       lazy: false,
       desc: {
-        desc1: '总是忘记自己要做什么，又厌烦了在纸上列出条条框框，想要一个强大的TODO应用来时刻记录自己将要做的事情、学习计划或者是财富增长？' +
+        desc1: '总是忘记自己要做什么，又厌烦了在纸上列出条条框框，想要一个强大的TODO应用来时刻记录自己将要做的事情、学习计划？' +
           '又是否厌烦了那些来自上个世纪的老旧页面？ 加入我们，为您提供人性化的图形界面、丰富的记录功能和紧随潮流的页面样式。 ——Dice'
       },
       cards: [
@@ -137,14 +148,28 @@ export default {
       this.$refs.form.validate()
     },
     commit () {
-      this.loading = true
+      // 仍需要对数据是否合规做判断
+      let vm = this
+      let params = {name: vm.name, email: vm.email, password: vm.password}
+      vm.loadingButton = true
+      user.register(params).then(
+        ({body: {token, account}}) => {
+
+        }
+      ).catch(
+        // (error) => {
+        //
+        // }
+      ).finally(() => {
+        vm.loadingButton = false
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/scss/main';
+  @import '~@/assets/scss/main';
 
   >>> .v-text-field__details{overflow: visible;}
 
@@ -152,10 +177,28 @@ export default {
 
   >>> .v-icon.v-icon {font-size: 1.5rem}
 
-  >>> .theme--light.v-application { background: transparent }
+  >>> .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {}
+
+  /*.custom-loader {*/
+  /*  background-color: mediumspringgreen;*/
+  /*}*/
+  /*<template v-slot:loader><span></span></template>*/
+  /*1976d2*/
+  .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: #1976d2 !important;
+  }
+
+  .theme--light.v-btn.v-btn--disabled {
+    color: $color-primary !important;
+  }
+
+  .v-counter {
+    color: $color-primary !important;
+  }
 
   .register {
     position: relative;
+    z-index: 1;
   }
 
   .header {
@@ -242,7 +285,7 @@ export default {
 
       &--border {
         height: 1px;
-        border-top: 1px solid rgba($color-primary, .3);
+        border-top: 1px solid $color-quartus;
         width: 80vw;
         padding-bottom: 3px;
       }
@@ -341,13 +384,17 @@ export default {
       width: 100%;
       background-color: $color-secondary;
       position: relative;
+      text-align: center;
       &--footer {
         word-break: break-all;
         color: $color-quartus;
-        margin: 5px 5%;
+        width: 90%;
         position: absolute;
         bottom: 0;
-        left: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 5px 0;
+        border-top: 1px solid $color-quartus;
         font-size: 1.3rem;
         line-height: 1rem;
         a {
@@ -364,10 +411,10 @@ export default {
 
       &--commit {
         position: absolute;
-        top: 55%;
-        left: 45%;
+        top: 58%;
+        left: 50%;
         transform: translate(-50%, -50%); // 为什么不居中？
-        width: 50%;
+        width: 35%;
 
       }
 
