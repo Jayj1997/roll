@@ -5,9 +5,7 @@
         <span>Dice</span>
       </div>
       <div class="top__form">
-        <v-form  ref="form" v-model="valid" :lazy-validation="lazy">
-          <slot name="text-fields">text-fields</slot>
-        </v-form>
+        <slot name="form">text-fields</slot>
       </div>
     </div>
     <div class="bottom">
@@ -15,8 +13,10 @@
         <slot name="buttons">buttons</slot>
       </div>
       <div class="bottom__footer">
-        Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice&copy;,
-        Copyright by Jay.
+        <slot name="footer">
+          Build by <a href="https://github.com/Jayj1997" class="sign-in__body--link">Jay</a> for his online todo app Roll&Dice&copy;,
+          Copyright by Jay.
+        </slot>
       </div>
     </div>
   </div>
@@ -24,13 +24,7 @@
 
 <script>
 export default {
-  name: 'Account',
-  data () {
-    return {
-      valid: true,
-      lazy: false
-    }
-  }
+  name: 'Account'
 }
 </script>
 

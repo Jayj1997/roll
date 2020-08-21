@@ -26,7 +26,7 @@
       </div>
       <div class="body__footer">
         <div class="body__footer--border"></div>
-        <span>已经加入我们了？<a href="#" style="text-decoration: none; color: white">点击登录 &rarr;</a></span>
+        <span>已经加入我们了？<a @click="toLogin" style="text-decoration: none; color: white">点击登录 &rarr;</a></span>
       </div>
     </div>
     <div class="sign-in">
@@ -42,18 +42,18 @@
           </div>
           <div class="sign-in__header--form">
             <v-form ref="form" v-model="valid" :lazy-validation="lazy">
-              <v-text-field v-model="name" background-color="white" :counter="10" height="5rem"
+              <v-text-field v-model="name" background-color="white" :counter="10"
                             :rules="nameRules" label="昵称" filled shaped clearable :loading="loadingName"
                             clear-icon="fas fa-times" @focus="loadingName = !loadingName"
                             validate-on-blur
                             required></v-text-field>
-              <v-text-field v-model="email" background-color="white" :counter="30" height="5rem"
+              <v-text-field v-model="email" background-color="white" :counter="30"
                             :rules="emailRules" label="邮箱" filled shaped clearable :loading="loadingEmail"
                             clear-icon="fas fa-times" @focus="loadingEmail = !loadingEmail"
                             :error="errorEmail" :error-messages="errorEmail? '邮箱已经被注册了': ''"
                             validate-on-blur
                             required></v-text-field>
-              <v-text-field v-model="password" background-color="white" height="5rem"
+              <v-text-field v-model="password" background-color="white"
                             :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
                             :type="showP ? 'text' : 'password'"
                             hint="最少八个字符数字/密码/." class="input-group--focused"
@@ -144,26 +144,30 @@ export default {
     }
   },
   methods: {
+    toLogin () {
+      this.$router.push({ path: '/login' })
+    },
     validate () {
-      this.$refs.form.validate()
+      return this.$refs.form.validate()
     },
     commit () {
-      // 仍需要对数据是否合规做判断
       let vm = this
-      let params = {name: vm.name, email: vm.email, password: vm.password}
-      vm.loadingButton = true
-      user.register(params).then(
-        // ({body: {token, account}}) => {
-        ({body}) => {
-          console.log(body)
-        }
-      ).catch(
-        (error) => {
-          console.log(error)
-        }
-      ).finally(() => {
-        vm.loadingButton = false
-      })
+      if (vm.validate()) {
+        let params = {name: vm.name, email: vm.email, password: vm.password}
+        vm.loadingButton = true
+        user.register(params).then(
+          // ({body: {token, account}}) => {
+          ({body}) => {
+            console.log(body)
+          }
+        ).catch(
+          (error) => {
+            console.log(error)
+          }
+        ).finally(() => {
+          vm.loadingButton = false
+        })
+      }
     }
   }
 }
@@ -180,11 +184,6 @@ export default {
 
   >>> .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {}
 
-  /*.custom-loader {*/
-  /*  background-color: mediumspringgreen;*/
-  /*}*/
-  /*<template v-slot:loader><span></span></template>*/
-  /*1976d2*/
   .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
     background-color: #1976d2 !important;
   }
@@ -416,7 +415,6 @@ export default {
         left: 50%;
         transform: translate(-50%, -50%); // 为什么不居中？
         width: 35%;
-
       }
 
       &--link {

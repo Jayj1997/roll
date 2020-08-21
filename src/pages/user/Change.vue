@@ -12,8 +12,17 @@
                       :type="showP ? 'text' : 'password'"
                       class="input-group--focused"
                       @click:append="showP = !showP"
-                      :rules="passwordRules" label="密码" filled shaped
-                      :loading="loadingPassword" @focus="loadingPassword = !loadingPassword"
+                      :rules="passwordRules" label="旧密码" filled shaped
+                      :loading="loadingOldPassword" @focus="loadingOldPassword = !loadingOldPassword"
+                      style="font-size: 1.6rem" validate-on-blur
+                      required></v-text-field>
+        <v-text-field v-model="password" background-color="white"
+                      :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
+                      :type="showP ? 'text' : 'password'"
+                      class="input-group--focused"
+                      @click:append="showP = !showP"
+                      :rules="passwordRules" label="新密码" filled shaped
+                      :loading="loadingNewPassword" @focus="loadingNewPassword = !loadingNewPassword"
                       style="font-size: 1.6rem" validate-on-blur
                       required></v-text-field>
       </v-form>
@@ -24,11 +33,8 @@
         :disabled="loadingButton"
         block
         class="primary sign-in__body--commit"
-        @click="login"
-      >登陆<v-icon right dark>fab fa-earlybirds</v-icon></v-btn>
-    </template>
-    <template v-slot:footer>
-      忘记密码？<a @click="toForget" class="footer">点击找回&rarr;</a>
+        @click="change"
+      >修改密码<v-icon right dark>fas fa-dove</v-icon></v-btn>
     </template>
   </account>
 </template>
@@ -37,22 +43,23 @@
 import Account from '@/components/user/Account'
 
 export default {
-  name: 'Login',
-  components: {Account},
+  name: 'Change',
+  components: { Account },
   data () {
     return {
       valid: true,
       lazy: false,
       showP: false, // 默认不显示密码
-      loadingButton: false,
-      loadingEmail: true,
-      loadingPassword: true,
       email: '',
+      loadingEmail: true,
+      loadingOldPassword: true,
+      loadingNewPassword: true,
+      password: '',
+      loadingButton: false,
       emailRules: [
         v => !!v || '要填邮箱哦',
         v => /.+@.+\..+/.test(v) || '这不是个正确的邮箱哦'
       ],
-      password: '',
       passwordRules: [
         v => !!v || '要填密码哦',
         v => !!/[a-zA-Z0-9.]/.test(v) || '这不是个正确的密码哦',
@@ -61,17 +68,14 @@ export default {
     }
   },
   methods: {
-    login () {
+    validate () {
+      return this.$refs.form.validate()
+    },
+    change () {
       let vm = this
       if (vm.validate()) {
         vm.loadingButton = true
       }
-    },
-    validate () {
-      return this.$refs.form.validate()
-    },
-    toForget () {
-      this.$router.push({ path: '/forget' })
     }
   }
 }
@@ -87,11 +91,5 @@ export default {
   }
   .theme--light.v-btn.v-btn--disabled {
     color: $color-primary !important;
-  }
-
-  .footer {
-    text-decoration: none;
-    font-size: 1.2rem;
-    color: $color-primary;
   }
 </style>
