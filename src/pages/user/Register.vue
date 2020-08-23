@@ -50,7 +50,8 @@
               <v-text-field v-model="email" background-color="white" :counter="30"
                             :rules="emailRules" label="邮箱" filled shaped clearable :loading="loadingEmail"
                             clear-icon="fas fa-times" @focus="loadingEmail = !loadingEmail"
-                            :error="errorEmail" :error-messages="errorEmail? '邮箱已经被注册了': ''"
+                            @blur="errorEmail = false"
+                            :error-messages="errorEmail? '邮箱已经被注册了': ''"
                             validate-on-blur
                             required></v-text-field>
               <v-text-field v-model="password" background-color="white"
@@ -107,11 +108,11 @@ export default {
       loadingEmail: true,
       loadingPassword: true,
       errorEmail: false,
-      informDefault: {state: '弱提醒——每日6点发送计划', value: 2},
+      informDefault: {state: '弱提醒——每日6点发送计划', value: 1},
       informWay: [
-        {state: '完全不提醒——计划完全靠自律', value: 1},
-        {state: '弱提醒——每日6点发送计划', value: 2},
-        {state: '强提醒——我么的自律:o', value: 3}
+        {state: '完全不提醒——计划完全靠自律', value: 0},
+        {state: '弱提醒——每日6点发送计划', value: 1},
+        {state: '强提醒——我么的自律:o', value: 2}
       ],
       showP: false, // 默认不显示密码
       name: '',
@@ -145,7 +146,7 @@ export default {
   },
   methods: {
     toLogin () {
-      this.$router.push({ path: '/login' })
+      this.$router.push({ name: 'Login' })
     },
     validate () {
       return this.$refs.form.validate()
@@ -153,17 +154,17 @@ export default {
     commit () {
       let vm = this
       if (vm.validate()) {
-        let params = {name: vm.name, email: vm.email, password: vm.password}
+        let params = {name: vm.name,
+          email: vm.email,
+          password: vm.password,
+          inform: vm.informDefault.value}
         vm.loadingButton = true
-        user.register(params).then(
-          // ({body: {token, account}}) => {
-          ({body}) => {
-            console.log(body)
-          }
-        ).catch(
-          (error) => {
-            console.log(error)
-          }
+        user.register(params).then(() => {
+          vm.$router.push({name: 'Login'})
+        }
+        ).catch(() => {
+          vm.errorEmail = true
+        }
         ).finally(() => {
           vm.loadingButton = false
         })
