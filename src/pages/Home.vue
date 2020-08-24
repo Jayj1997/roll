@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <pop-header></pop-header>
-  </div>
+  <navigator></navigator>
 </template>
 
 <script>
-import PopHeader from '@/components/PopHeader'
+import Navigator from '@/components/Navigator'
 export default {
   name: 'Home',
-  components: { PopHeader }
+  components: { Navigator }
 }
 </script>
 

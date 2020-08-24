@@ -136,12 +136,7 @@ export default {
       desc: {
         desc1: '总是忘记自己要做什么，又厌烦了在纸上列出条条框框，想要一个强大的TODO应用来时刻记录自己将要做的事情、学习计划？' +
           '又是否厌烦了那些来自上个世纪的老旧页面？ 加入我们，为您提供人性化的图形界面、丰富的记录功能和紧随潮流的页面样式。 ——Dice'
-      },
-      cards: [
-        {id: 1, title: '计划', image: require('@/assets/images/register/musicArt.jpg'), text: '还没想好'},
-        {id: 2, title: '运动', image: require('@/assets/images/register/gym2.jpg'), text: '还没想好'},
-        {id: 3, title: '财富', image: require('@/assets/images/register/wealth.jpg'), text: '还没想好'}
-      ]
+      }
     }
   },
   methods: {
