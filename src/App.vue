@@ -1,13 +1,16 @@
 <template>
   <v-app id="app">
-      <router-view />
+    <navigator></navigator>
+    <router-view />
   </v-app>
 </template>
 
 <script>
+import Navigator from '@/components/Navigator'
 export default {
   name: 'App',
   components: {
+    Navigator
   },
   mounted () {
     // console.warn('unforeseeable life may like you\'re rolling a dice')
@@ -23,4 +26,7 @@ export default {
 
 <style lang="scss">
   @import '~@/assets/scss/main';
+  .app {
+    position: relative;
+  }
 </style>

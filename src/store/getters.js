@@ -1,8 +1,8 @@
 const getters = {
-  get_token: (state, getters) => {
+  get_token: (state) => {
     return state.token
   },
-  get_refresh_token: (state, getters) => {
+  get_refresh_token: (state) => {
     return state.refresh_token
   }
 }

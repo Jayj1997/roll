@@ -11,7 +11,7 @@ import Axios from 'axios'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
 Vue.use(Vuetify)
-Axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.state.token
+Axios.defaults.headers.common['Authorization'] = store.state.token
 Vue.config.productionTip = false
 
 // eslint-disable-next-line no-new

@@ -39,8 +39,10 @@
 
 <script>
 import Account from '@/components/user/Account'
+import Axios from 'axios'
 import user from '@/methods/user'
 import {mapState, mapMutations} from 'vuex'
+import { store } from '../../store'
 
 export default {
   name: 'Login',
@@ -91,7 +93,9 @@ export default {
           (rsp) => {
             vm.addToken(rsp.data.access_token)
             vm.addRefreshToken(rsp.data.refresh_token)
-            this.$router.push({name: 'Home'})
+            Axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.state.token
+            // 设置默认头的操作在得到token前 所以在这里设置一遍
+            this.$router.push({name: 'App'})
           }
         ).catch(() => {
           vm.errorEmail = true

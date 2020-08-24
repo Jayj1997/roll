@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container style="position: fixed; z-index: 5000">
     <v-avatar
       class="avatar__behind"
       height="40" width="40"
       @click="drawer ? drawer = false : drawer = true">
-      <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="icon">
+      <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">
     </v-avatar>
     <v-navigation-drawer
       height="100vh"
@@ -23,12 +23,12 @@
       >
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar height="40" width="40">
-            <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="icon">
+            <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Jay</v-list-item-title>
-            <v-list-item-subtitle>Work harder</v-list-item-subtitle>
+            <v-list-item-title :style="{color: fontColor}">Jay</v-list-item-title>
+            <v-list-item-subtitle :style="{color: fontColor + '!important'}">Work harder</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
@@ -37,24 +37,24 @@
         <v-list-item
           v-for="item in items"
           :key="item.title"
-          link
+          link @click="goTo(item.name)"
         >
           <v-list-item-icon>
-            <v-icon :style="item.name === 'schedule' ? 'font-size: 25px':
-                            item.name === 'todo' ? 'font-size: 27px' :
-                            item.name === 'key' ? 'font-size: 23px' :
-                            item.name === 'setting' ? 'font-size: 26px' :
-                            'font-size: 24px'" style="color: white">{{ item.icon }}</v-icon>
+            <v-icon :style="(item.name === 'Schedule' ? 'font-size: 25px;':
+                            item.name === 'Todo' ? 'font-size: 27px;' :
+                            item.name === 'Key' ? 'font-size: 23px;' :
+                            item.name === 'Profile' ? 'font-size: 26px;' :
+                            'font-size: 24px;') + 'color:' + fontColor ">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content>
+          <v-list-item-content :style="{color: fontColor + '!important'}">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <template v-slot:append>
         <div class="pa-4">
-          <v-btn block>登出</v-btn>
+          <v-btn @click="logout" block color="info"><v-icon style="margin-right: 10px">fas fa-hippo</v-icon>登出</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -62,42 +62,54 @@
 </template>
 
 <script>
+import user from '@/methods/user'
+import {store} from '@/store'
+
 export default {
   name: 'Navigator',
   data () {
     return {
       drawer: false,
       items: [
-        { name: 'schedule', title: '日程', icon: 'fas fa-calendar-alt' },
-        { name: 'todo', title: '任务', icon: 'fas fa-clipboard-list' },
-        { name: 'key', title: '密码', icon: 'fas fa-key' },
-        { name: 'setting', title: '资料', icon: 'fas fa-user' }
+        { name: 'Schedule', title: '日程', icon: 'fas fa-calendar-alt' },
+        { name: 'Todo', title: '任务', icon: 'fas fa-clipboard-list' },
+        { name: 'Note', title: '笔记', icon: 'fas fa-book' },
+        { name: 'Key', title: '密码', icon: 'fas fa-key' },
+        { name: 'Profile', title: '资料', icon: 'fas fa-user' }
       ],
       color: 'primary',
-      colors: [
-        'primary',
-        'blue',
-        'success',
-        'red',
-        'teal'
-      ],
+      fontColor: 'black',
       background: true
     }
   },
   computed: {
     bg () {
-      return this.background ? 'https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg' : undefined
+      return this.background ? require('@/assets/images/navigator/background-mountain.jpg') : undefined
     },
     permanent () {
       return document.body.clientWidth >= 600 // todo 宽度更替更新
     },
     expandOnHover () {
-      return document.body.clientWidth >= 600 &&
-        document.body.clientWidth <= 960// todo 宽度更替更新
+      return document.body.clientWidth >= 600 // todo 宽度更替更新
     },
     miniVariant () {
-      return document.body.clientWidth >= 600 &&
-        document.body.clientWidth <= 960// todo 宽度更替更新
+      return document.body.clientWidth >= 600 // todo 宽度更替更新
+    }
+  },
+  methods: {
+    logout () {
+      user.logout()
+      store.commit('CLEAR_TOKEN')
+      store.commit('CLEAR_REFRESH_TOKEN')
+      this.$router.push({ name: 'Login' })
+    },
+    goTo (name) {
+      let vm = this
+      if (this.$router.currentRoute.name !== name) {
+        this.$router.push({ name: name })
+      } else {
+        vm.drawer = false
+      }
     }
   }
 }
@@ -110,11 +122,13 @@ export default {
   >>> .v-list--dense .v-list-item, .v-list-item__title {
     font-size: 1.4rem !important;
     font-weight: 600 !important;
-    color: white
   }
 
   .v-list-item__avatar { margin-left: 6px !important;}
-  .v-list-item__subtitle {margin-top: 10px !important;}
+  .v-list-item__subtitle {
+    margin-top: 10px !important;
+    font-size: 1.2rem !important;
+    color: rgba(255, 255, 255, .5) !important;}
 
   .avatar__behind {
     position: absolute;

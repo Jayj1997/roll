@@ -12,9 +12,11 @@ const mutations = {
   },
   [TYPES.CLEAR_TOKEN] (state) {
     state.token = ''
+    localStorage.removeItem('Authorization')
   },
   [TYPES.CLEAR_REFRESH_TOKEN] (state) {
     state.refresh_token = ''
+    localStorage.removeItem('refresh_token')
   }
 }
 
