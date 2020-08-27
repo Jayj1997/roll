@@ -1,11 +1,10 @@
 <template>
-  <v-container style="position: fixed; z-index: 5000">
-    <v-avatar
-      class="avatar__behind"
-      height="40" width="40"
-      @click="drawer ? drawer = false : drawer = true">
-      <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">
-    </v-avatar>
+<!--    <v-avatar-->
+<!--      class="avatar__behind"-->
+<!--      height="40" width="40"-->
+<!--      @click="drawer ? drawer = false : drawer = true">-->
+<!--      <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">-->
+<!--    </v-avatar>-->
     <v-navigation-drawer
       height="100vh"
       v-model="drawer"
@@ -15,6 +14,7 @@
       width="230"
       :color="color"
       :src="bg"
+      style="position: fixed; z-index: 5000"
     >
       <v-list
         dense
@@ -58,7 +58,6 @@
         </div>
       </template>
     </v-navigation-drawer>
-  </v-container>
 </template>
 
 <script>
