@@ -46,6 +46,7 @@ import { store } from '../../store'
 
 export default {
   name: 'Login',
+  // todo 已知bug 登录之后首页的drawer没有出现
   computed: {
     ...mapState({
       token: (state) => state.token,

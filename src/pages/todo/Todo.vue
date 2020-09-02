@@ -25,37 +25,9 @@
           <v-icon>fas fa-trash-alt</v-icon>
         </v-btn>
 
-        <v-btn icon>
+        <v-btn icon @click="test()">
           <v-icon>fas fa-plus-circle</v-icon>
         </v-btn>
-
-        <v-menu nudge-width="40"
-                open-on-click
-                max-width="200"
-                max-height="500"
-                :open-on-hover="!isPhone()"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>fas fa-ellipsis-v</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item
-              v-for="(item, i) in items"
-              :key="i"
-              @click="showItem(item)"
-              style="text-align: center"
-            >
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
 
         <template v-slot:extension>
           <v-tabs
@@ -92,26 +64,24 @@
 
 <script>
 import constant from '@/con/constant'
+import todo from '@/methods/todo'
 
 export default {
   name: 'Todo',
   data () {
     return {
-      tabTitle: '加载中...',
+      tabTitle: '任务',
       tab: null,
       tabs: [
-        '--'
-      ],
-      items: [
-        { id: 1, title: '加载中...' }
+        '工作', 'Roll&Dice'
       ]
     }
   },
   methods: {
     test () {
-      setTimeout(() => {
-        return 1
-      }, 2000)
+      todo.todos().then((resp) => {
+        console.log(resp)
+      })
     },
     showItem (item) {
       this.tabTitle = item.title
@@ -120,7 +90,6 @@ export default {
       return constant.isPhone
     },
     openDrawer () {
-
     }
   },
   computed: {

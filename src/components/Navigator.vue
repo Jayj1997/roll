@@ -87,19 +87,25 @@ export default {
       return this.background ? require('@/assets/images/navigator/background-mountain.jpg') : undefined
     }
     // permanent () {
-    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    //   return document.body.clientWidth >= 600
     // },
     // expandOnHover () {
-    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    //   return document.body.clientWidth >= 600
     // },
     // miniVariant () {
-    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    //   return document.body.clientWidth >= 600
     // }
   },
   mounted () {
     window.onresize = () => {
-      this.threeInOne = document.body.clientWidth >= 600
-      console.log(this.threeInOne)
+      // todo 已知bug 在600范围附近的屏幕激活drawer会变化宽度 导致无限开合
+      if (document.body) {
+        this.threeInOne = document.body.clientWidth >= 600
+      } else if (document.documentElement.clientWidth) {
+        this.threeInOne = document.documentElement.clientWidth >= 600
+      } else {
+        console.log('navigator.onresize error : 取得屏幕宽度错误')
+      }
     }
   },
   methods: {
