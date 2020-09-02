@@ -8,9 +8,9 @@
     <v-navigation-drawer
       height="100vh"
       v-model="drawer"
-      :expand-on-hover="expandOnHover"
-      :mini-variant="miniVariant"
-      :permanent="permanent"
+      :expand-on-hover="threeInOne"
+      :mini-variant="threeInOne"
+      :permanent="threeInOne"
       width="230"
       :color="color"
       :src="bg"
@@ -21,7 +21,7 @@
         nav
         class="py-0"
       >
-        <v-list-item two-line :class="miniVariant && 'px-0'">
+        <v-list-item two-line :class="threeInOne && 'px-0'">
           <v-list-item-avatar height="40" width="40">
             <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">
           </v-list-item-avatar>
@@ -78,21 +78,28 @@ export default {
       ],
       color: 'primary',
       fontColor: 'black',
-      background: true
+      background: true,
+      threeInOne: document.body.clientWidth >= 600
     }
   },
   computed: {
     bg () {
       return this.background ? require('@/assets/images/navigator/background-mountain.jpg') : undefined
-    },
-    permanent () {
-      return document.body.clientWidth >= 600 // todo 宽度更替更新
-    },
-    expandOnHover () {
-      return document.body.clientWidth >= 600 // todo 宽度更替更新
-    },
-    miniVariant () {
-      return document.body.clientWidth >= 600 // todo 宽度更替更新
+    }
+    // permanent () {
+    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    // },
+    // expandOnHover () {
+    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    // },
+    // miniVariant () {
+    //   return document.body.clientWidth >= 600 // todo 宽度更替更新
+    // }
+  },
+  mounted () {
+    window.onresize = () => {
+      this.threeInOne = document.body.clientWidth >= 600
+      console.log(this.threeInOne)
     }
   },
   methods: {

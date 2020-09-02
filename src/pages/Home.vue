@@ -27,6 +27,10 @@ export default {
 
     &__content {
       margin-left: 56px;
+
+      @include respond(phone) {
+        margin-left: 0;
+      }
     }
   }
 </style>
