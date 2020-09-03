@@ -5,6 +5,8 @@ import Home from '../pages/Home'
 import user from './user'
 import todo from './todo'
 
+import Test from '../pages/Test'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -15,7 +17,15 @@ const router = new Router({
       name: 'Home',
       component: Home,
       children: [
-        ...todo // 任务模块
+        ...todo, // 任务模块
+        {
+          path: '/test',
+          name: 'Test',
+          component: Test,
+          meta: {
+            title: '你写的代码真帅'
+          }
+        }
       ],
       meta: {
         title: 'Dice'

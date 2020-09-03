@@ -74,12 +74,13 @@ export default {
         { name: 'Todo', title: '任务', icon: 'fas fa-clipboard-list' },
         { name: 'Note', title: '笔记', icon: 'fas fa-book' },
         { name: 'Key', title: '密码', icon: 'fas fa-key' },
-        { name: 'Profile', title: '资料', icon: 'fas fa-user' }
+        { name: 'Profile', title: '资料', icon: 'fas fa-user' },
+        { name: 'Test', title: '测试页面', icon: '' }
       ],
       color: 'primary',
       fontColor: 'black',
       background: true,
-      threeInOne: document.body.clientWidth >= 600
+      threeInOne: document.body.clientWidth >= 600 // todo 判断document.element
     }
   },
   computed: {
