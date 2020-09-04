@@ -2,12 +2,7 @@
   <div class="todo">
     <v-card class="todo__body"
       elevation="15">
-      <v-toolbar
-        color="cyan"
-        :src="bg"
-        dark
-        flat
-      >
+      <v-toolbar color="cyan" :src="bg" dark flat>
         <v-app-bar-nav-icon v-if="isPhone()">
           <v-avatar
             class="avatar__behind"
@@ -116,7 +111,7 @@
         <v-tab-item v-for="tab in tabs" :key="tab.id">
           <v-row no-gutters>
             <v-col cols="12" sm="8" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
-
+              <test style="margin-top: 1rem"></test>
             </v-col>
             <v-col cols="12" sm="4" class="todo__secondary" style="background-color: blue">1</v-col>
           </v-row>
@@ -150,11 +145,13 @@
 import constant from '@/con/constant'
 import todo from '@/methods/todo'
 import draggable from 'vuedraggable'
+import Test from '../Test'
 
 export default {
   name: 'Todo',
   components: {
-    draggable
+    draggable,
+    Test
   },
   data () {
     return {

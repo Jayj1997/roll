@@ -23,7 +23,7 @@ const router = new Router({
           name: 'Test',
           component: Test,
           meta: {
-            title: '你写的代码真帅'
+            title: '你写代码的样子真帅'
           }
         }
       ],
