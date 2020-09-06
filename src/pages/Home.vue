@@ -8,11 +8,35 @@
 <script>
 import Navigator from '@/components/Navigator'
 import Background from '@/components/Background'
+import user from '@/methods/user'
+import {mapState, mapMutations} from 'vuex'
+
 export default {
   name: 'Home',
   components: {
     Navigator,
     Background
+  },
+  mounted () {
+    let vm = this
+    if (!vm.userDetail) {
+      user.details().then(
+        (rsp) => {
+          vm.setUser(rsp.data) // todo 不能写使用user.id的show方法 有安全隐患
+        }
+      )
+    }
+  },
+  computed: {
+    ...mapState({
+      userDetail: (state) => state.user
+    })
+  },
+  methods: {
+    ...mapMutations({
+      setUser: 'SET_USER',
+      clearUser: 'CLEAR_USER'
+    })
   }
 }
 </script>

@@ -72,7 +72,7 @@
                     </v-col>
                     <v-col cols="12" style="margin-top: 15px">
                       <v-autocomplete
-                        :items="['', '工作', '计划', '兴趣', '健身', '其它']"
+                        :items=tabLabels
                         label="分类(统计用)"
                         v-model="tabLabel"
                       ></v-autocomplete>
@@ -85,7 +85,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text style="font-size: 1.4rem" @click="addTab = false">取消</v-btn>
-              <v-btn color="success darken-1" style="font-size: 1.4rem" text @click="addNewTab()">保存</v-btn>
+              <v-btn color="success darken-1" style="font-size: 1.4rem" text @click="addTodo()">保存</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -99,8 +99,10 @@
             align-with-title
           >
             <v-tabs-slider color="yellow"></v-tabs-slider>
+
             <v-tab
-              v-for="tab in tabs" :key="tab.id" style="font-size: 1.3rem; font-weight: 600">
+              v-for="tab in tabs" :key="tab.id"
+              style="font-size: 1.3rem; font-weight: 600">
               {{ tab.name }}
             </v-tab>
           </v-tabs>
@@ -138,6 +140,24 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+      timeout="2000"
+    >
+      <span class="text-h5">{{ snackbarText }}</span>
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+          class="text-h5"
+        >
+          关闭
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -163,7 +183,12 @@ export default {
       addTab: false, // 添加页面
       deleteTab: false, // 删除页面
       loadingTab: false, // 加载页面,
+      snackbar: false,
+      snackbarText: '',
       tabName: '',
+      tabPriority: 1,
+      tabLabel: '',
+      tabLabels: ['', '工作', '计划', '兴趣', '健身', '其它'],
       nameRules: [
         v => !!v || '',
         v => v.length < 9 || ''
@@ -172,31 +197,63 @@ export default {
         v => v > 0 || '',
         v => v < 11 || ''
       ],
-      tabPriority: 1,
-      tabLabel: '',
-      tabs: [
-        {id: 1, name: '工作', label: '', priority: 1},
-        {id: 2, name: 'Roll&Dice', label: '', priority: 2},
-        {id: 3, name: '健身', label: '', priority: 10}
-      ],
-      items: [
-        {id: 1, name: 'jdsiajdsaij'},
-        {id: 2, name: 'sdadsads'}
-      ]
+      tabs: []
     }
   },
   mounted () {
+    let vm = this
+
     // 滑动作移tab 阻止页面后退
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)
     })
+
+    todo.todos.index().then(
+      (rsp) => {
+        if (rsp.data.items) {
+          vm.tabs = rsp.data.items
+          console.log(vm.tabs)
+        } else {
+          vm.tabs = [{id: 1, name: '默认', priority: 0}]
+        }
+      }
+    )
   },
   methods: {
-    test () {
-      todo.todos().then((resp) => {
-        console.log(resp)
-      })
+    addTodo () {
+      let vm = this
+      if (vm.validate()) {
+        vm.loadingTab = true
+        var data = {
+          'name': vm.tabName,
+          'priority': vm.tabPriority,
+          'label': vm.tabLabel
+        }
+        todo.todos.store(data).then(
+          (rsp) => {
+            if (rsp.data.error) {
+              vm.snackbarText = rsp.data.error
+              vm.snackbar = true
+            } else {
+              vm.snackbarText = rsp.data.msg
+              vm.snackbar = true
+              vm.tabs.push({
+                id: rsp.data.id,
+                name: vm.tabName,
+                priority: vm.tabPriority,
+                label: vm.label
+              })
+              vm.addTab = false
+            }
+          }
+        ).finally(() => {
+          vm.loadingTab = false
+          vm.tabName = ''
+          vm.tabPriority = 1
+          vm.tabLabel = ''
+        })
+      }
     },
     validate () {
       return this.$refs.form.validate()
@@ -207,28 +264,25 @@ export default {
     openDrawer () {
       // todo 调起drawer
     },
-    addNewTab () {
-      let vm = this
-      if (vm.validate()) {
-        vm.loadingTab = true
-        setTimeout(() => {
-          vm.tabs.push({ name: vm.tabName, priority: vm.tabPriority, label: vm.tabLabel })
-          vm.loadingTab = false
-          vm.addTab = false
-          vm.tabName = ''
-          vm.tabPriority = 1
-          vm.tabLabel = ''
-        }, 3000)
-      }
-    },
     deleteThisTab () {
       let vm = this
       vm.loadingTab = true
-      setTimeout(() => {
-        vm.loadingTab = false
-        vm.tabs.splice(vm.tab, 1)
-        vm.deleteTab = false
-      }, 3000)
+      todo.todos.deleteTodo(vm.tabs[vm.tab].id)
+        .then((rsp) => {
+          if (rsp.data.msg) {
+            vm.snackbarText = rsp.data.msg
+            vm.snackbar = true
+            vm.tabs.splice(vm.tab, 1)
+            vm.deleteTab = false
+          } else {
+            vm.snackbarText = rsp.data.error
+            vm.snackbar = true
+          }
+        }).finally(() => {
+          vm.loadingTab = false
+        })
+
+      // // vm.tabs.splice(vm.tab, 1)
     }
   },
   computed: {
@@ -243,6 +297,9 @@ export default {
         disabled: false,
         ghostClass: 'ghost'
       }
+    },
+    orderTab () {
+      return null
     }
   }
 }

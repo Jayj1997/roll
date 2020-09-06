@@ -117,7 +117,7 @@ export default {
   }
 
   .todo {
-    margin-left: 6rem;
+    margin-left: 1rem;
     @include respond(phone) {
       margin-left: 0;
     }

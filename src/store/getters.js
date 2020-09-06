@@ -4,6 +4,9 @@ const getters = {
   },
   get_refresh_token: (state) => {
     return state.refresh_token
+  },
+  get_user: (state) => {
+    return state.user
   }
 }
 

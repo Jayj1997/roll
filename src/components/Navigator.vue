@@ -114,6 +114,7 @@ export default {
       user.logout()
       store.commit('CLEAR_TOKEN')
       store.commit('CLEAR_REFRESH_TOKEN')
+      store.commit('CLEAR_USER')
       this.$router.push({ name: 'Login' })
     },
     goTo (name) {

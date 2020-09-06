@@ -4,7 +4,7 @@ import Router from 'vue-router'
 import Home from '../pages/Home'
 import user from './user'
 import todo from './todo'
-
+import {store} from '../store'
 import Test from '../pages/Test'
 
 Vue.use(Router)
@@ -43,19 +43,19 @@ const defaultTitle = 'Dice'
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title ? to.meta.title : defaultTitle
   next()
-  // if (to.name === 'Login' ||
-  //   to.name === 'Register' ||
-  //   to.name === 'Forget') {
-  //   // todo 忘记密码流程还没有走全
-  //   next()
-  // } else {
-  //   let token = store.state.token
-  //   if (token === '' || token === null) {
-  //     next('/login')
-  //   } else {
-  //     next()
-  //   }
-  // }
+  if (to.name === 'Login' ||
+    to.name === 'Register' ||
+    to.name === 'Forget') {
+    // todo 忘记密码流程还没有走全
+    next()
+  } else {
+    let token = store.state.token
+    if (token === '' || token === null) {
+      next('/login')
+    } else {
+      next()
+    }
+  }
 })
 
 export default router
