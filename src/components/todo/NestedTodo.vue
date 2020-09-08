@@ -84,6 +84,8 @@
 <script>
 import draggable from 'vuedraggable'
 
+// todo 移动端移动bug
+
 export default {
   name: 'NestedTodo',
   components: {
@@ -136,7 +138,6 @@ export default {
   @import '~@/assets/scss/main';
 
   .v-list-item__title { margin: 0 .5rem; font-size: 1.3rem }
-
 
   .todo-list {
     &:not(:last-child) {
