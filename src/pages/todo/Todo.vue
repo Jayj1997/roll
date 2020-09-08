@@ -36,13 +36,8 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text style="font-size: 1.4rem" @click="deleteTab = false">取消</v-btn>
-              <v-btn
-                color="primary"
-                text
-                @click="deleteThisTab()"
-                class="error--text"
-                style="font-size: 1.4rem"
-              >
+              <v-btn color="primary" text @click="deleteThisTab()"
+                     class="error--text" style="font-size: 1.4rem">
                 确定
               </v-btn>
             </v-card-actions>
@@ -112,10 +107,10 @@
       <v-tabs-items v-model="tab">
         <v-tab-item v-for="tab in tabs" :key="tab.id">
           <v-row no-gutters>
-            <v-col cols="12" sm="8" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
-              <test style="margin-top: 1rem"></test>
+            <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
+              <nested-todo class="nested-todo" :tasks="list"></nested-todo>
             </v-col>
-            <v-col cols="12" sm="4" class="todo__secondary" style="background-color: blue">1</v-col>
+            <v-col cols="12" sm="3" class="todo__secondary" style="background-color: blue">1</v-col>
           </v-row>
         </v-tab-item>
       </v-tabs-items>
@@ -152,8 +147,7 @@
           text
           v-bind="attrs"
           @click="snackbar = false"
-          class="text-h5"
-        >
+          class="text-h5">
           关闭
         </v-btn>
       </template>
@@ -165,16 +159,22 @@
 import constant from '@/con/constant'
 import todo from '@/methods/todo'
 import draggable from 'vuedraggable'
-import Test from '../Test'
+import NestedTodo from '@/components/todo/NestedTodo'
 
 export default {
   name: 'Todo',
   components: {
     draggable,
-    Test
+    NestedTodo
   },
   data () {
     return {
+      list: [
+        {id: 1, name: '写完todo', order: 1, priority: 1, timer: '2020-09-13 08:00', comment: '说着玩玩,写不完', sub: []},
+        {id: 2, name: '完成添加todo', order: 2, timer: '2020-09-05 08:00', sub: []},
+        {id: 3, name: '编辑按钮', order: 3, sub: []},
+        {id: 4, name: '完成sub task', order: 4, priority: 2, sub: [{id: 5, name: '完成timeline', order: 5, priority: 3, sub: []}]}
+      ],
       drag: false,
       valid: false,
       todoTitle: '任务',
@@ -213,7 +213,6 @@ export default {
       (rsp) => {
         if (rsp.data.items) {
           vm.tabs = rsp.data.items
-          console.log(vm.tabs)
         } else {
           vm.tabs = [{id: 1, name: '默认', priority: 0}]
         }
