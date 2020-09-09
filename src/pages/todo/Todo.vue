@@ -79,13 +79,13 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text style="font-size: 1.4rem" @click="addTab = false">取消</v-btn>
-              <v-btn color="success darken-1" style="font-size: 1.4rem" text @click="addTodo()">保存</v-btn>
+              <v-btn color="success darken-1" style="font-size: 1.4rem" text @click="addTodoTab()">保存</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <template v-slot:extension>
           <v-tabs
-            v-model="currentTab"
+            v-model="tab"
             center-active
             fixed-tabs
             show-arrows
@@ -94,20 +94,19 @@
             align-with-title
             slider-color="yellow">
             <v-tab
-              v-for="tab in tabs" :key="tab.id" :href="'#tab-'+tab.name"
+              v-for="(thisTab, index) in tabs" :key="index"
               style="font-size: 1.3rem; font-weight: 600">
-              {{ tab.name }}
+              {{ thisTab.name }}
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-      <v-tabs-items v-model="currentTab" touchless>
-        <v-tab-item
-          v-for="tab in tabs" :key="tab.id"
-          :value="'tab-'+ tab.name">
+      <v-tabs-items v-model="tab" touchless>
+        <v-tab-item v-for="(tab, index) in tabs" :key="index">
           <v-row no-gutters>
             <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
-              <nested-todo class="nested-todo" :tasks="list"></nested-todo>
+              <input-task @add-new-todo="addTodo" :todo_id="tab.id"></input-task>
+              <nested-todo class="nested-todo" :tasks="tab.items"></nested-todo>
             </v-col>
             <v-col cols="12" sm="3" class="todo__secondary" style="background-color: blue">1</v-col>
           </v-row>
@@ -157,22 +156,17 @@ import constant from '@/con/constant'
 import todo from '@/methods/todo'
 import draggable from 'vuedraggable'
 import NestedTodo from '@/components/todo/NestedTodo'
+import InputTask from './InputTask'
 
 export default {
   name: 'Todo',
   components: {
     draggable,
-    NestedTodo
+    NestedTodo,
+    InputTask
   },
   data () {
     return {
-      list: [
-        {id: 1, name: '写完todo', order: 1, priority: 1, timer: '2020-09-13 08:00', comment: '说着玩玩,写不完', sub: []},
-        {id: 2, name: '完成添加todo', order: 2, timer: '2020-09-05 08:00', sub: []},
-        {id: 3, name: '编辑按钮', order: 3, sub: []},
-        {id: 4, name: '完成sub task', order: 4, priority: 2, sub: [{id: 5, name: '完成timeline', order: 5, priority: 3, sub: []}]}
-      ],
-      currentTab: '',
       drag: false,
       valid: false,
       todoTitle: '任务',
@@ -200,8 +194,7 @@ export default {
   },
   mounted () {
     let vm = this
-
-    // 滑动作移tab 阻止页面后退
+    // 左滑弹出tab 阻止页面后退
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)
@@ -215,20 +208,32 @@ export default {
       }
     ).catch(() => {
       vm.tabs = [
-        {id: 1, name: '默认', priority: 0},
-        {id: 2, name: '默认2', priority: 1}
+        {id: 1, name: '默认', priority: 0}
       ]
       vm.snackbarText = '加载失败, 网络异常'
       vm.snackbar = true
-    }).finally(() => {
-      vm.currentTab = 'tab-' + vm.tabs[1].name
     })
   },
   methods: {
     test () {
-      console.log(this.currentTab)
+      console.log(this.tab)
     },
-    addTodo () {
+    addTodo (data) {
+      let vm = this
+      todo.todoItems.store(data).then(
+        (rsp) => {
+          if (rsp.data.msg) {
+            vm.snackbarText = rsp.data.msg
+            vm.snackbar = true
+            vm.tabs[vm.tab].items.push(data.data)
+          } else if (rsp.data.error) {
+            vm.snackbarText = rsp.data.error
+            vm.snackbar = true
+          }
+        }
+      )
+    },
+    addTodoTab () {
       let vm = this
       if (vm.validate()) {
         vm.loadingTab = true
@@ -268,9 +273,6 @@ export default {
     isPhone () {
       return constant.isPhone
     },
-    // openDrawer () {
-    //   // todo 调起drawer
-    // },
     deleteThisTab () {
       let vm = this
       vm.loadingTab = true
@@ -288,8 +290,6 @@ export default {
         }).finally(() => {
           vm.loadingTab = false
         })
-
-      // // vm.tabs.splice(vm.tab, 1)
     }
   },
   computed: {
