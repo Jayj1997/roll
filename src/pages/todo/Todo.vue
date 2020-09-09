@@ -3,17 +3,16 @@
     <v-card class="todo__body"
       elevation="15">
       <v-toolbar color="cyan" :src="bg" dark flat>
-        <v-app-bar-nav-icon v-if="isPhone()">
-          <v-avatar
-            class="avatar__behind"
-            height="40" width="40"
-            @click="openDrawer()">
-            <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">
-          </v-avatar>
-        </v-app-bar-nav-icon>
+<!--        <v-app-bar-nav-icon v-if="isPhone()">-->
+<!--          <v-avatar-->
+<!--            class="avatar__behind"-->
+<!--            height="40" width="40"-->
+<!--            @click="openDrawer()">-->
+<!--            <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">-->
+<!--          </v-avatar>-->
+<!--        </v-app-bar-nav-icon>-->
 
         <v-toolbar-title style="font-size: 1.7rem; font-weight: 600">{{todoTitle}}</v-toolbar-title>
-
         <v-spacer></v-spacer>
         <v-dialog v-model="deleteTab" width="500">
           <template v-slot:activator="{ on, attrs }">
@@ -86,26 +85,26 @@
         </v-dialog>
         <template v-slot:extension>
           <v-tabs
-            v-model="tab"
+            v-model="currentTab"
             center-active
+            fixed-tabs
             show-arrows
             next-icon="fas fa-arrow-right"
             prev-icon="fas fa-arrow-left"
             align-with-title
-          >
-            <v-tabs-slider color="yellow"></v-tabs-slider>
-
+            slider-color="yellow">
             <v-tab
-              v-for="tab in tabs" :key="tab.id"
+              v-for="tab in tabs" :key="tab.id" :href="'#tab-'+tab.name"
               style="font-size: 1.3rem; font-weight: 600">
               {{ tab.name }}
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="tab in tabs" :key="tab.id">
+      <v-tabs-items v-model="currentTab" touchless>
+        <v-tab-item
+          v-for="tab in tabs" :key="tab.id"
+          :value="'tab-'+ tab.name">
           <v-row no-gutters>
             <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
               <nested-todo class="nested-todo" :tasks="list"></nested-todo>
@@ -119,11 +118,9 @@
       v-model="loadingTab"
       hide-overlay
       persistent
-      width="300"
-    >
+      width="300">
       <v-card
         color="primary"
-        dark
       >
         <v-card-text style="padding-top: 10px">
           {{loadingText}}
@@ -175,6 +172,7 @@ export default {
         {id: 3, name: '编辑按钮', order: 3, sub: []},
         {id: 4, name: '完成sub task', order: 4, priority: 2, sub: [{id: 5, name: '完成timeline', order: 5, priority: 3, sub: []}]}
       ],
+      currentTab: '',
       drag: false,
       valid: false,
       todoTitle: '任务',
@@ -213,13 +211,23 @@ export default {
       (rsp) => {
         if (rsp.data.items) {
           vm.tabs = rsp.data.items
-        } else {
-          vm.tabs = [{id: 1, name: '默认', priority: 0}]
         }
       }
-    )
+    ).catch(() => {
+      vm.tabs = [
+        {id: 1, name: '默认', priority: 0},
+        {id: 2, name: '默认2', priority: 1}
+      ]
+      vm.snackbarText = '加载失败, 网络异常'
+      vm.snackbar = true
+    }).finally(() => {
+      vm.currentTab = 'tab-' + vm.tabs[1].name
+    })
   },
   methods: {
+    test () {
+      console.log(this.currentTab)
+    },
     addTodo () {
       let vm = this
       if (vm.validate()) {
@@ -260,9 +268,9 @@ export default {
     isPhone () {
       return constant.isPhone
     },
-    openDrawer () {
-      // todo 调起drawer
-    },
+    // openDrawer () {
+    //   // todo 调起drawer
+    // },
     deleteThisTab () {
       let vm = this
       vm.loadingTab = true
@@ -296,9 +304,6 @@ export default {
         disabled: false,
         ghostClass: 'ghost'
       }
-    },
-    orderTab () {
-      return null
     }
   }
 }
@@ -308,6 +313,7 @@ export default {
   @import '~@/assets/scss/main';
 
   >>> .v-text-field__details{overflow: visible;}
+  >>> .v-counter { margin-right: 2rem !important; }
 
   .todo {
 

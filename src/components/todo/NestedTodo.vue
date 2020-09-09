@@ -19,7 +19,7 @@
           </v-avatar>
 
           <v-avatar class="card__avatar--left" left>
-            <v-icon>fas fa-exclamation-circle</v-icon>
+            <v-icon color="orange">fas fa-exclamation-circle</v-icon>
           </v-avatar>
 
 <!--          <v-chip class="card__chips" :close="editing === element.id"-->
@@ -31,7 +31,6 @@
 <!--            <span :style="editing !== element.id ? 'margin-right: 7px' : ''">-->
 <!--              {{element.timer}}</span>-->
 <!--          </v-chip>-->
-
 <!--          <v-chip class="card__chips" :close="editing === element.id"-->
 <!--                  @click:close="deleteChips(element, 'comment')"-->
 <!--                  close-icon="fas fa-times"-->
@@ -45,11 +44,11 @@
 <!--            </v-text-field>-->
 <!--          </v-chip>-->
 
-<!--          <v-btn icon @click="edit(element)">-->
-<!--            <v-icon>fas fa-pencil-alt</v-icon>-->
-<!--          </v-btn>-->
+          <v-btn icon @click="edit(element)">
+            <v-icon>fas fa-pencil-alt</v-icon>
+          </v-btn>
 
-          <v-menu bottom left>
+          <v-menu bottom left min-width="25rem">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 icon
@@ -59,22 +58,44 @@
                 <v-icon>fas fa-ellipsis-v</v-icon>
               </v-btn>
             </template>
-
-            <v-list>
-              <v-list-item
-                v-for="(item, i) in todoItem"
-                :key="i"
-                @click=""
-              >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
+            <v-card>
+              <v-card-text style="padding: 1rem; cursor: pointer" v-for="item in todoItem" :key="item.title">
+                <v-icon style="margin-right: 1rem">{{item.icon}}</v-icon>{{item.title}}
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-text style="padding: 10px; background-color: #f5f5f5">
+                <v-card-title style="">
+                  <span style="color: grey;">设置优先级</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-btn v-for="(icon, index) in flagItem" :key="index" elevation="0"
+                         @click="changePriority(element, icon.priority)">
+                    <v-icon :class="icon.icon" :color="icon.color" >
+                    </v-icon>
+                  </v-btn>
+                </v-card-text>
+                <v-card-title style="background-color: #f5f5f5">
+                  <span style="color: grey;">设置日程</span>
+                </v-card-title>
+                <v-card-text style="background-color: #f5f5f5">
+                  <v-btn v-for="(schedule, index) in scheduleItem" :key="index" elevation="0"
+                         @click="addSchedule(element, schedule.schedule)">
+                    <v-icon :class="schedule.icon" :color="schedule.color" block>
+                    </v-icon>
+                  </v-btn>
+                  <v-row style="text-align: center; margin-top: 3px">
+                    <v-col v-for="n in 4" :key="n" cols="3">
+                      {{n === 1 ? '明天' :
+                      n === 2 ? '下周一' :
+                      n === 3 ? '删除日程' :
+                      n === 4 ? '更多' : ''}}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card-text>
+            </v-card>
           </v-menu>
-
         </v-card-title>
-<!--        <v-card-text v-if="editing">-->
-<!--          -->
-<!--        </v-card-text>-->
       </v-card>
       <nested-todo class="nested-drag" :tasks="element.sub"></nested-todo>
     </div>
@@ -101,20 +122,40 @@ export default {
     return {
       dragging: false,
       editing: 0,
+      flagItem: [
+        { icon: 'fas fa-flag', color: 'red', priority: 1 },
+        { icon: 'fas fa-flag', color: 'orange', priority: 2 },
+        { icon: 'fas fa-flag', color: 'blue', priority: 3 },
+        { icon: 'far fa-flag', color: '', priority: 0 }
+      ],
+      scheduleItem: [
+        { icon: 'fas fa-calendar-plus', color: 'green', schedule: 'tomorrow' },
+        { icon: 'fas fa-calendar-alt', color: 'blue', schedule: 'nextMon' },
+        { icon: 'fas fa-calendar-times', color: 'red', schedule: 'cancelSchedule' },
+        { icon: 'fas fa-ellipsis-h', color: '', schedule: 'more' }
+      ],
       todoItem: [
-        { title: '编辑', move: 'edit' },
-        { title: '添加子任务', move: 'addSub' },
-        { title: '移至其他项目', move: 'moveTo' }
+        { title: '编辑', move: 'edit', icon: 'far fa-edit' },
+        { title: '添加子任务', move: 'addSub', icon: 'fas fa-plus' },
+        { title: '复制此项目', move: 'duplicate', icon: 'far fa-copy' },
+        { title: '移至其他项目', move: 'moveTo', icon: 'fas fa-external-link-alt' },
+        { title: '删除', move: 'delete', icon: 'far fa-trash-alt' }
       ]
     }
   },
   methods: {
-    add () {
-      this.list.push({name: 'new', order: 999})
+    addSchedule (element, schedule) {
+
     },
     edit (element) {
       let vm = this
       vm.editing = element.id
+    },
+    changePriority (element, priority) {
+      if (element.priority !== priority) {
+        element.priority = priority
+        // todo sql操作
+      }
     },
     deleteChips (element, val) {
       element[val] = false
@@ -125,7 +166,7 @@ export default {
     dragOptions () {
       return {
         animation: 200,
-        group: 'drap-animation',
+        group: 'drag-animation',
         disabled: false,
         ghostClass: 'ghost'
       }
@@ -137,7 +178,7 @@ export default {
 <style scoped lang="scss">
   @import '~@/assets/scss/main';
 
-  .v-list-item__title { margin: 0 .5rem; font-size: 1.3rem }
+  /*.v-list-item__title { margin: 0 .5rem; font-size: 1.3rem }*/
 
   .todo-list {
     &:not(:last-child) {
@@ -148,6 +189,9 @@ export default {
       padding: 1rem;
       @include respond(tab-port) {
         padding: .5rem;
+      }
+      @include respond(phone) {
+        padding: 0;
       }
     }
 

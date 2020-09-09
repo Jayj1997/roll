@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import {store} from '@/store'
+import {store} from '@/store'
 import Home from '../pages/Home'
 import user from './user'
 import todo from './todo'
-import {store} from '../store'
 import Test from '../pages/Test'
 
 Vue.use(Router)
@@ -42,7 +41,7 @@ const router = new Router({
 const defaultTitle = 'Dice'
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title ? to.meta.title : defaultTitle
-  next()
+  // next()
   if (to.name === 'Login' ||
     to.name === 'Register' ||
     to.name === 'Forget') {
