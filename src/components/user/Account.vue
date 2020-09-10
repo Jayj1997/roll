@@ -9,7 +9,8 @@
       </div>
     </div>
     <div class="bottom">
-      <div class="bottom__buttons" style="color: white">
+      <div class="bottom__buttons col-5 col-sm-3 col-md-2"
+           style="color: white">
         <slot name="buttons">buttons</slot>
       </div>
       <div class="bottom__footer">
@@ -64,7 +65,6 @@ export default {
 
     &__buttons {
       position: absolute;
-      width: 60%;
       top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);

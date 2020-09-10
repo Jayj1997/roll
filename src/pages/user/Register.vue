@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <div class="header">
-      <div class="bg-video" style="padding-bottom: 40vh">
+      <div class="bg-video" style="padding-bottom: 30vh">
         <video class="bg-video__content" autoplay muted loop>
           <source src="~@/assets/images/register/bg-video.mp4" type="video/mp4">
           你的浏览器不支持播放视频，请更新您的浏览器
@@ -26,7 +26,9 @@
       </div>
       <div class="body__footer">
         <div class="body__footer--border"></div>
-        <span>已经加入我们了？<a @click="toLogin" style="text-decoration: none; color: white">点击登录 &rarr;</a></span>
+        <span>已经加入我们了？<a @click="toLogin"
+                         style="text-decoration: none; color: white">
+          点击登录 &rarr;</a></span>
       </div>
     </div>
     <div class="sign-in">
@@ -43,11 +45,15 @@
           <div class="sign-in__header--form">
             <v-form ref="form" v-model="valid" :lazy-validation="lazy">
               <v-text-field v-model="name" background-color="white" :counter="10"
+                            class="col-10 col-sm-6 col-md-4"
+                            style="margin: 0 auto;"
                             :rules="nameRules" label="昵称" filled shaped clearable :loading="loadingName"
                             clear-icon="fas fa-times" @focus="loadingName = !loadingName"
                             validate-on-blur
                             required></v-text-field>
               <v-text-field v-model="email" background-color="white" :counter="30"
+                            class="col-10 col-sm-6 col-md-4"
+                            style="margin: 0 auto;"
                             :rules="emailRules" label="邮箱" filled shaped clearable :loading="loadingEmail"
                             clear-icon="fas fa-times" @focus="loadingEmail = !loadingEmail"
                             @blur="errorEmail = false"
@@ -57,33 +63,36 @@
               <v-text-field v-model="password" background-color="white"
                             :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
                             :type="showP ? 'text' : 'password'"
-                            hint="最少八个字符数字/密码/." class="input-group--focused"
+                            hint="最少八个字符数字/密码/."
+                            class="input-group--focused col-10 col-sm-6 col-md-4"
                             @click:append="showP = !showP"
                             :rules="passwordRules" label="密码" filled shaped
                             :loading="loadingPassword" @focus="loadingPassword = !loadingPassword"
-                            style="font-size: 1.6rem" validate-on-blur
+                            style="font-size: 1.6rem; margin: 0 auto;" validate-on-blur
                             required></v-text-field>
             </v-form>
           </div>
         </div>
         <div class="sign-in__body">
           <div class="sign-in__body--buttons">
-            <div class="sign-in__body--checkboxes">
-              <v-select
-                v-model="informDefault"
-                background-color="white"
-                class="text-body-1"
-                :items="informWay"
-                item-text="state"
-                item-value="value"
-                label="请选一种提醒规律"
-                append-icon="far fa-surprise"
-                solo></v-select>
-            </div>
+<!--            <div class="sign-in__body&#45;&#45;checkboxes col-10 col-sm-6 col-md-4" style="margin: 0 auto;">-->
+<!--              <v-select-->
+<!--                v-model="informDefault"-->
+<!--                background-color="white"-->
+<!--                class="text-body-1"-->
+<!--                :items="informWay"-->
+<!--                item-text="state"-->
+<!--                item-value="value"-->
+<!--                label="请选一种提醒规律"-->
+<!--                append-icon="far fa-surprise"-->
+<!--                solo></v-select>-->
+<!--            </div>-->
+<!--            todo 等有了通知再打开-->
             <v-btn
               :loading="loadingButton"
               :disabled="loadingButton"
-              class="primary sign-in__body--commit"
+              class="primary sign-in__body--commit col-6 col-sm-3 col-md-2"
+              style="margin: 0 auto;"
               @click="commit"
             >注册<v-icon right dark>fas fa-cloud</v-icon></v-btn>
           </div>
@@ -117,19 +126,19 @@ export default {
       showP: false, // 默认不显示密码
       name: '',
       nameRules: [
-        v => !!v || '要告诉我如何称呼你啊',
-        v => (v && v.length <= 10) || '名字太长称呼起来会累'
+        v => !!v || '如何称呼你呢',
+        v => (v && v.length <= 10) || '名字太长了'
       ],
       email: '',
       emailRules: [
-        v => !!v || '没有联系方式就无法通知你了',
-        v => /.+@.+\..+/.test(v) || '填错了联系方式就无法通知你了'
+        v => !!v || '邮箱不能为空',
+        v => /.+@.+\..+/.test(v) || '邮箱格式错误'
       ],
       password: '',
       passwordRules: [
-        v => !!v || '要填密码哦',
-        v => !!/[a-zA-Z0-9.]/.test(v) || '密码仅限于数字/字母/.',
-        v => v.length >= 8 || '好歹填八个啊？'
+        v => !!v || '要填密码',
+        v => !!/[a-zA-Z0-9.]/.test(v) || '密码仅限于数字/字母/.组合',
+        v => v.length >= 8 || '最少八个字符'
       ],
       valid: true,
       lazy: false,
@@ -199,7 +208,7 @@ export default {
 
   .header {
     width: 100%;
-    height: 60vh;
+    height: 70vh;
     background-color: $color-tertiary;
 
     &__border {
@@ -210,7 +219,7 @@ export default {
     }
 
     &__content {
-      height: 50vh;
+      height: 60vh;
       padding: 10%;
       text-align: center;
       animation: moveInBottom 1s ease-out;
@@ -246,21 +255,29 @@ export default {
 
   .body {
     width: 100%;
-    height: 40vh;
+    height: 30vh;
     background-color: $color-secondary;
     position: relative;
     color: $color-primary;
 
     &__content {
-      height: 40vh;
-      padding: 15% 10%;
+      position: absolute;
+      bottom: 40%;
+      @include respond(tab-port) {
+        bottom: 30%;
+      }
+      @include respond(phone) {
+        bottom: 20%;
+      }
+      left: 10%;
+      right: 10%;
+      text-align: center;
       opacity: 0;
       animation: moveInBottom 1s ease-out .5s forwards;
 
       &--title {
         font-size: 1.5rem;
       }
-
       &--border {
         height: 1vh;
         margin: 1vh 0;
@@ -282,7 +299,6 @@ export default {
       &--border {
         height: 1px;
         border-top: 1px solid $color-quartus;
-        width: 80vw;
         padding-bottom: 3px;
       }
 
@@ -407,7 +423,7 @@ export default {
 
       &--commit {
         position: absolute;
-        top: 58%;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%); // 为什么不居中？
         width: 35%;

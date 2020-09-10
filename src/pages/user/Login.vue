@@ -3,6 +3,8 @@
     <template v-slot:form>
       <v-form  ref="form" v-model="valid" :lazy-validation="lazy">
         <v-text-field v-model="email" background-color="white" :counter="30"
+                      class="col-10 col-sm-6 col-md-4"
+                      style="margin: 0 auto;"
                       :rules="emailRules" label="邮箱" filled shaped clearable
                       :loading="loadingEmail" clear-icon="fas fa-times"
                       @focus="loadingEmail = !loadingEmail" validate-on-blur
@@ -12,13 +14,13 @@
         <v-text-field v-model="password" background-color="white"
                       :append-icon="showP ? 'far fa-eye fa-xs' : 'far fa-eye-slash fa-xs'"
                       :type="showP ? 'text' : 'password'"
-                      class="input-group--focused"
+                      class="input-group--focused col-10 col-sm-6 col-md-4"
                       @blur="errorPassword = false"
                       :error="errorPassword"
                       @click:append="showP = !showP"
                       :rules="passwordRules" label="密码" filled shaped
                       :loading="loadingPassword" @focus="loadingPassword = !loadingPassword"
-                      style="font-size: 1.6rem" validate-on-blur
+                      style="font-size: 1.6rem; margin: 0 auto;" validate-on-blur
                       required></v-text-field>
       </v-form>
     </template>
