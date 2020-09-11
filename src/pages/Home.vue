@@ -8,7 +8,7 @@
 <script>
 import Navigator from '@/components/Navigator'
 import Background from '@/components/Background'
-import user from '@/methods/user'
+import user from '@/methods/api/user'
 import {mapState, mapMutations} from 'vuex'
 
 export default {

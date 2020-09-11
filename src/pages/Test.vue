@@ -13,12 +13,14 @@ export default {
   data () {
     return {
       list: [
-        {id: 1, name: '工作', order: 1, priority: 1, timer: '2020-09-13 08:00', comment: '说着玩玩,写不完', sub: []},
-        {id: 2, name: '写完某项目', order: 2, timer: '2020-09-05 08:00', sub: []},
+        {id: 1, name: '工作', order: 1, important: 1, schedule: '2020-09-13 08:00', common: '说着玩玩,写不完', sub: []},
+        {id: 2, name: '写完某项目', order: 2, schedule: '2020-09-05 08:00', sub: []},
         {id: 3, name: '完成ppt', order: 3, sub: []},
-        {id: 4, name: '搭建环境', order: 4, priority: 2, sub: [{id: 5, name: '接入https', order: 5, priority: 3, sub: []}]}
+        {id: 4, name: '搭建环境', order: 4, important: 2, sub: [{id: 5, name: '接入https', order: 5, important: 3, sub: []}]}
       ]
     }
+  },
+  methods: {
   }
 }
 </script>

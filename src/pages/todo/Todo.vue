@@ -153,10 +153,10 @@
 
 <script>
 import constant from '@/con/constant'
-import todo from '@/methods/todo'
+import todo from '@/methods/api/todo'
 import draggable from 'vuedraggable'
 import NestedTodo from '@/components/todo/NestedTodo'
-import InputTask from './InputTask'
+import InputTask from '@/components/todo/InputTask'
 
 export default {
   name: 'Todo',

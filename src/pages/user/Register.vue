@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import user from '@/methods/user'
+import user from '@/methods/api/user'
 
 export default {
   data () {

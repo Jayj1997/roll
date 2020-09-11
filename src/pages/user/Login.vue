@@ -42,7 +42,7 @@
 <script>
 import Account from '@/components/user/Account'
 import Axios from 'axios'
-import user from '@/methods/user'
+import user from '@/methods/api/user'
 import {mapState, mapMutations} from 'vuex'
 import { store } from '../../store'
 

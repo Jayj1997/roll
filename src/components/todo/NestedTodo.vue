@@ -1,5 +1,6 @@
 <template>
   <draggable :list="tasks ? tasks : []" class="list-group dragArea"
+             @change="changed"
              handle=".handle" v-bind="dragOptions">
     <div v-for="(element, index) in tasks" :key="index">
       <v-card class="todo-list" elevation="5">
@@ -95,15 +96,13 @@
           </v-menu>
         </v-card-title>
       </v-card>
-      <nested-todo class="nested-drag" :tasks="element.sub"></nested-todo>
+      <nested-todo class="nested-drag" @change="changed" :tasks="element.sub"></nested-todo>
     </div>
   </draggable>
 </template>
 
 <script>
 import draggable from 'vuedraggable'
-
-// todo 移动端移动bug
 
 export default {
   name: 'NestedTodo',
@@ -157,6 +156,9 @@ export default {
     deleteChips (element, val) {
       element[val] = false
       // todo api删除相应
+    },
+    changed (data) {
+      console.log(data)
     }
   },
   computed: {
