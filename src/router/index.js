@@ -41,20 +41,20 @@ const router = new Router({
 const defaultTitle = 'Dice'
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title ? to.meta.title : defaultTitle
-  next()
-  // if (to.name === 'Login' ||
-  //   to.name === 'Register' ||
-  //   to.name === 'Forget') {
-  //   // todo 忘记密码流程还没有走全
-  //   next()
-  // } else {
-  //   let token = store.state.token
-  //   if (token === '' || token === null) {
-  //     next('/login')
-  //   } else {
-  //     next()
-  //   }
-  // }
+  // next()
+  if (to.name === 'Login' ||
+    to.name === 'Register' ||
+    to.name === 'Forget') {
+    // todo 忘记密码流程还没有走全
+    next()
+  } else {
+    let token = store.state.token
+    if (token === '' || token === null) {
+      next('/login')
+    } else {
+      next()
+    }
+  }
 })
 
 export default router
