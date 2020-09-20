@@ -106,7 +106,12 @@
           <v-row no-gutters>
             <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
               <input-task @add-new-todo="addTodo" :todo_id="tab.id"></input-task>
-              <nested-todo class="nested-todo" :tasks="tab.items"></nested-todo>
+              <nested-todo class="nested-todo" :tasks="tab.items" v-if="editing"></nested-todo>
+              <check-todo @finish-todo="finishTodo" @todo-item-move="todoItemMove"
+                          class="check-todo"
+                          :loadingItem="loadingItem" :tasks="tab.items"
+                          v-else></check-todo>
+
             </v-col>
             <v-col cols="12" sm="3" class="todo__secondary" style="background-color: blue">1</v-col>
           </v-row>
@@ -157,13 +162,16 @@ import todo from '@/methods/api/todo'
 import draggable from 'vuedraggable'
 import NestedTodo from '@/components/todo/NestedTodo'
 import InputTask from '@/components/todo/InputTask'
+import CheckTodo from '@/components/todo/CheckTodo'
 
 export default {
   name: 'Todo',
+  inject: ['reload'],
   components: {
     draggable,
     NestedTodo,
-    InputTask
+    InputTask,
+    CheckTodo
   },
   data () {
     return {
@@ -189,7 +197,9 @@ export default {
         v => v > 0 || '',
         v => v < 11 || ''
       ],
-      tabs: []
+      tabs: [],
+      editing: false,
+      loadingItem: 0
     }
   },
   mounted () {
@@ -199,39 +209,65 @@ export default {
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)
     })
-
-    todo.todos.index().then(
-      (rsp) => {
-        if (rsp.data.items) {
-          vm.tabs = rsp.data.items
-        }
-      }
-    ).catch(() => {
-      vm.tabs = [
-        {id: 1, name: '默认', priority: 0}
-      ]
-      vm.snackbarText = '加载失败, 网络异常'
-      vm.snackbar = true
-    })
+    vm.loadTabs()
   },
   methods: {
-    test () {
-      console.log(this.tab)
+    loadTabs () {
+      let vm = this
+      todo.todos.index().then(
+        (rsp) => {
+          if (rsp.data.items) {
+            vm.tabs = rsp.data.items
+          }
+        }
+      ).catch(() => {
+        vm.tabs = [
+          {id: 1, name: '默认', priority: 0}
+        ]
+        vm.snackbarText = '加载失败, 网络异常'
+        vm.snackbar = true
+      })
     },
-    addTodo (data) {
+    todoItemMove (id, move) {
+      let vm = this
+      if (move === 'delete') {
+        // 删除Item
+        todo.todoItems.deleteItem(id).then((rsp) => {
+          vm.snackbarText = rsp.data.msg
+          vm.snackbar = true
+        }).catch((e) => {
+          vm.snackbarText = e.data.error
+          vm.snackbar = true
+        }).finally(() => {
+          vm.loadTabs()
+        })
+      }
+    },
+    addTodo (data) { // 添加todoItem
       let vm = this
       todo.todoItems.store(data).then(
         (rsp) => {
-          if (rsp.data.msg) {
-            vm.snackbarText = rsp.data.msg
-            vm.snackbar = true
-            vm.tabs[vm.tab].items.push(data.data)
-          } else if (rsp.data.error) {
-            vm.snackbarText = rsp.data.error
-            vm.snackbar = true
-          }
+          vm.snackbarText = rsp.data.msg
+          vm.snackbar = true
         }
-      )
+      ).catch((e) => {
+        vm.snackbarText = e.response.data.error
+        vm.snackbar = true
+      }).finally(() => {
+        vm.loadTabs()
+      })
+    },
+    finishTodo (itemId) { // 完成todoItem
+      let vm = this
+      todo.todoItems.update(itemId).then((rsp) => {
+        vm.snackbarText = rsp.data.msg
+        vm.snackbar = true
+      }).catch((e) => {
+        vm.snackbarText = e.response.data.error
+        vm.snackbar = true
+      }).finally(() => {
+        vm.loadTabs()
+      })
     },
     addTodoTab () {
       let vm = this
@@ -242,28 +278,19 @@ export default {
           'priority': vm.tabPriority,
           'label': vm.tabLabel
         }
-        todo.todos.store(data).then(
-          (rsp) => {
-            if (rsp.data.error) {
-              vm.snackbarText = rsp.data.error
-              vm.snackbar = true
-            } else {
-              vm.snackbarText = rsp.data.msg
-              vm.snackbar = true
-              vm.tabs.push({
-                id: rsp.data.id,
-                name: vm.tabName,
-                priority: vm.tabPriority,
-                label: vm.label
-              })
-              vm.addTab = false
-            }
-          }
-        ).finally(() => {
+        todo.todos.store(data).then((rsp) => {
+          vm.snackbarText = rsp.data.msg
+          vm.snackbar = true
+          vm.addTab = false
+        }).catch((e) => {
+          vm.snackbarText = e.response.data.error
+          vm.snackbar = true
+        }).finally(() => {
           vm.loadingTab = false
           vm.tabName = ''
           vm.tabPriority = 1
           vm.tabLabel = ''
+          vm.loadTabs()
         })
       }
     },

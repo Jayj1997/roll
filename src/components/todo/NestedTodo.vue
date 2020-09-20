@@ -11,7 +11,7 @@
           <v-btn icon class="handle">
             <v-icon style="font-size: 1.5rem">fas fa-arrows-alt</v-icon>
           </v-btn>
-          <span v-if="editing !== element.id">{{element.name}}</span>
+          <span v-if="editing !== element.id" style="font-size: 1.3rem">{{element.name}}</span>
           <v-text-field autofocus single-line v-else v-model="element.name" />
           <v-spacer></v-spacer>
 
@@ -23,27 +23,6 @@
             <v-icon color="orange">fas fa-exclamation-circle</v-icon>
           </v-avatar>
 
-<!--          <v-chip class="card__chips" :close="editing === element.id"-->
-<!--                  @click:close="deleteChips(element, 'timer')"-->
-<!--                  close-icon="fas fa-times"-->
-<!--                  color="orange" text-color="white"-->
-<!--                  v-if="element.timer">-->
-
-<!--            <span :style="editing !== element.id ? 'margin-right: 7px' : ''">-->
-<!--              {{element.timer}}</span>-->
-<!--          </v-chip>-->
-<!--          <v-chip class="card__chips" :close="editing === element.id"-->
-<!--                  @click:close="deleteChips(element, 'comment')"-->
-<!--                  close-icon="fas fa-times"-->
-<!--                  color="green" text-color="white"-->
-<!--                  v-if="element.comment">-->
-
-<!--            <span v-if="editing !== element.id" :style="editing !== element.id ? 'margin-right: 7px' : ''">-->
-<!--            {{element.comment}}-->
-<!--            </span>-->
-<!--            <v-text-field single-line hide-details v-else v-model="element.comment">-->
-<!--            </v-text-field>-->
-<!--          </v-chip>-->
           <v-menu bottom left min-width="25rem">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -72,7 +51,7 @@
                   </v-btn>
                 </v-card-text>
                 <v-card-title style="background-color: #f5f5f5">
-                  <span style="color: grey;">设置日程</span>
+                  <span style="color: grey;">设置截止日期</span>
                 </v-card-title>
                 <v-card-text style="background-color: #f5f5f5">
                   <v-btn v-for="(schedule, index) in scheduleItem" :key="index" elevation="0"
@@ -83,10 +62,10 @@
                   <v-row style="text-align: center; margin-top: 3px">
                     <v-col v-for="n in 4" :key="n" cols="3">
                       {{
-                        n === 1 ? '明天' :
-                        n === 2 ? '本周五' :
-                        n === 3 ? '本周末' :
-                        n === 4 ? '自定义' : ''
+                      n === 1 ? '明天' :
+                      n === 2 ? '本周五' :
+                      n === 3 ? '本周末' :
+                      n === 4 ? '自定义' : ''
                       }}
                     </v-col>
                   </v-row>
@@ -94,6 +73,28 @@
               </v-card-text>
             </v-card>
           </v-menu>
+
+<!--          <v-chip class="card__chips" :close="editing === element.id"-->
+<!--                  @click:close="deleteChips(element, 'timer')"-->
+<!--                  close-icon="fas fa-times"-->
+<!--                  color="orange" text-color="white"-->
+<!--                  v-if="element.timer">-->
+
+<!--            <span :style="editing !== element.id ? 'margin-right: 7px' : ''">-->
+<!--              {{element.timer}}</span>-->
+<!--          </v-chip>-->
+<!--          <v-chip class="card__chips" :close="editing === element.id"-->
+<!--                  @click:close="deleteChips(element, 'comment')"-->
+<!--                  close-icon="fas fa-times"-->
+<!--                  color="green" text-color="white"-->
+<!--                  v-if="element.comment">-->
+
+<!--            <span v-if="editing !== element.id" :style="editing !== element.id ? 'margin-right: 7px' : ''">-->
+<!--            {{element.comment}}-->
+<!--            </span>-->
+<!--            <v-text-field single-line hide-details v-else v-model="element.comment">-->
+<!--            </v-text-field>-->
+<!--          </v-chip>-->
         </v-card-title>
       </v-card>
       <nested-todo class="nested-drag" @change="changed" :tasks="element.sub"></nested-todo>

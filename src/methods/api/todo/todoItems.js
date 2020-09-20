@@ -2,7 +2,7 @@ import Axios from 'axios'
 
 const API_URL_TODOS_ITEMS_INDEX = '/api/todo/todo_items'
 const API_URL_TODOS_ITEMS_SHOW = '/api/todo/todo_items/'
-const API_URL_TODOS_ITEMS_UPDATE = '/api/todo/todo_items'
+const API_URL_TODOS_ITEMS_UPDATE = '/api/todo/todo_items/'
 const API_URL_TODOS_ITEMS_CREATE = '/api/todo/todo_items'
 const API_URL_TODOS_ITEMS_DELETE = '/api/todo/todo_items/'
 
@@ -12,8 +12,8 @@ function index () {
 function show (id) {
   return Axios.get(API_URL_TODOS_ITEMS_SHOW + id)
 }
-function update (data) {
-  return Axios.patch(API_URL_TODOS_ITEMS_UPDATE, data)
+function update (id) {
+  return Axios.patch(API_URL_TODOS_ITEMS_UPDATE + id)
 }
 function store (data) {
   return Axios.post(API_URL_TODOS_ITEMS_CREATE, data)

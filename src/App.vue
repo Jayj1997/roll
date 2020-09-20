@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <router-view />
+    <router-view v-if="isRouterAlive" />
   </v-app>
 </template>
 
@@ -9,14 +9,24 @@ export default {
   name: 'App',
   components: {
   },
-  mounted () {
-    // console.warn('unforeseeable life may like you\'re rolling a dice')
-    // console.warn('but everything you fight makes everything worth')
+  provide () {
+    return {
+      reload: this.reload
+    }
   },
+  data () {
+    return {
+      isRouterAlive: true
+    }
+  },
+
   methods: {
-    // selectItem (tag) {
-    //   this.$router.push({ name: tag })
-    // }
+    reload () {
+      this.isRouterAlive = false
+      this.$nextTick(function () {
+        this.isRouterAlive = true
+      })
+    }
   }
 }
 </script>
