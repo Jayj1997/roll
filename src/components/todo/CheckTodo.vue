@@ -7,7 +7,7 @@
             element.id !== loadingItem ? 'far fa-circle' :
             'fas fa-circle-notch fa-spin'}}</v-icon>
       </v-list-item-icon>
-      <v-list-item-content>
+      <v-list-item-content style="flex: 2 1 !important;">
         <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"></v-list-item-title>
       </v-list-item-content>
 
@@ -51,21 +51,29 @@
               <span style="color: grey;">设置截止日期</span>
             </v-card-title>
             <v-card-text style="background-color: #f5f5f5">
-              <v-btn v-for="(schedule, index) in scheduleItem" :key="index" elevation="0"
-                     @click="addSchedule(element, schedule.schedule)">
-                <v-icon :class="schedule.icon" :color="schedule.color" block>
-                </v-icon>
-              </v-btn>
-              <v-row style="text-align: center; margin-top: 3px">
-                <v-col v-for="n in 4" :key="n" cols="3">
-                  {{
-                  n === 1 ? '明天' :
-                  n === 2 ? '本周五' :
-                  n === 3 ? '本周末' :
-                  n === 4 ? '自定义' : ''
-                  }}
-                </v-col>
-              </v-row>
+              <div v-for="(schedule, index) in scheduleItem" :key="index" style="display: inline-block">
+                <v-btn elevation="0"
+                       @click="addSchedule(element, schedule.schedule)">
+                  <v-icon :class="schedule.icon" :color="schedule.color" block>
+                  </v-icon>
+                </v-btn>
+                <span style="display: block; text-align: center">
+                  {{index === 0 ? '明天' :
+                  index === 1 ? '周五' :
+                  index === 2 ? '周末' :
+                  index === 3 ? '自定义' : ''}}
+                </span>
+              </div>
+<!--              <v-row style="text-align: center; margin-top: 3px">-->
+<!--                <v-col v-for="n in 4" :key="n" cols="3">-->
+<!--                  {{-->
+<!--                  n === 1 ? '明天' :-->
+<!--                  n === 2 ? '本周五' :-->
+<!--                  n === 3 ? '本周末' :-->
+<!--                  n === 4 ? '自定义' : ''-->
+<!--                  }}-->
+<!--                </v-col>-->
+<!--              </v-row>-->
             </v-card-text>
           </v-card-text>
         </v-card>
@@ -128,6 +136,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  >>> .v-card__subtitle, .v-card__text, .v-card__title {
+    padding: 10px !important;
+  }
 
+  >>> .v-btn:not(.v-btn--round).v-size--default {
+    height: 36px !important;
+    min-width: 50px !important;
+    padding: 0 15px !important;
+  }
 </style>

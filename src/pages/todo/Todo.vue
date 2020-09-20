@@ -259,6 +259,7 @@ export default {
     },
     finishTodo (itemId) { // 完成todoItem
       let vm = this
+      vm.loadingItem = itemId
       todo.todoItems.update(itemId).then((rsp) => {
         vm.snackbarText = rsp.data.msg
         vm.snackbar = true
@@ -267,6 +268,7 @@ export default {
         vm.snackbar = true
       }).finally(() => {
         vm.loadTabs()
+        vm.loadingItem = 0
       })
     },
     addTodoTab () {
