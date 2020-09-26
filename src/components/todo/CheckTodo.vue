@@ -8,7 +8,8 @@
             'fas fa-circle-notch fa-spin'}}</v-icon>
       </v-list-item-icon>
       <v-list-item-content style="flex: 2 1 !important;">
-        <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"></v-list-item-title>
+        <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"
+                            :class="element.order === 3 ? 'red--text' : element.order === 2 ? 'orange--text' : element.order === 1 ? 'blue--text' : ''"></v-list-item-title>
       </v-list-item-content>
 
       <v-spacer></v-spacer>
@@ -42,7 +43,7 @@
             </v-card-title>
             <v-card-text>
               <v-btn v-for="(icon, index) in flagItem" :key="index" elevation="0"
-                     @click="changeImportance(element, icon.important)">
+                     @click="updateOrder(element, icon.order)">
                 <v-icon :class="icon.icon" :color="icon.color" >
                 </v-icon>
               </v-btn>
@@ -105,10 +106,10 @@ export default {
   data () {
     return {
       flagItem: [
-        { icon: 'fas fa-flag', color: 'red', important: 3 },
-        { icon: 'fas fa-flag', color: 'orange', important: 2 },
-        { icon: 'fas fa-flag', color: 'blue', important: 1 },
-        { icon: 'far fa-flag', color: '', important: 0 }
+        { icon: 'fas fa-flag', color: 'red', order: 3 },
+        { icon: 'fas fa-flag', color: 'orange', order: 2 },
+        { icon: 'fas fa-flag', color: 'blue', order: 1 },
+        { icon: 'far fa-flag', color: '', order: 0 }
       ],
       scheduleItem: [
         { icon: 'fas fa-calendar-plus', color: 'green', schedule: 'tomorrow' },
@@ -127,10 +128,13 @@ export default {
   },
   methods: {
     finishTodo (element) {
-      this.$emit('finish-todo', element.id)
+      this.$emit('finish-todo', element)
     },
     todoItemMove (element, item) {
       this.$emit('todo-item-move', element.id, item.move)
+    },
+    updateOrder (element, order) {
+      this.$emit('update-order', element, order)
     }
   }
 }

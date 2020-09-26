@@ -6,8 +6,10 @@ const API_URL_TODOS_UPDATE = '/api/todo/todos'
 const API_URL_TODOS_CREATE = '/api/todo/todos'
 const API_URL_TODOS_DELETE = '/api/todo/todos/'
 
-function index () {
-  return Axios.get(API_URL_TODOS_INDEX)
+function index (data) {
+  return Axios.get(API_URL_TODOS_INDEX, {
+    params: data
+  })
 }
 function show (id) {
   return Axios.get(API_URL_TODOS_SHOW + id)
