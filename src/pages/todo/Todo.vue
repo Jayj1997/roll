@@ -102,17 +102,16 @@
         </template>
       </v-toolbar>
       <v-tabs-items v-model="tab" touchless>
-        <v-tab-item v-for="(tab, index) in tabs" :key="index">
+        <v-tab-item v-for="(tabChoosed, index) in tabs" :key="index">
           <v-row no-gutters>
             <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
-              <input-task @add-new-todo="addTodo" :todo_id="tab.id"></input-task>
-              <nested-todo class="nested-todo" :tasks="tab.items" v-if="editing"></nested-todo>
+              <input-task @add-new-todo="addTodo" :todo_id="tabChoosed.id"></input-task>
+<!--              <nested-todo class="nested-todo" :tasks="tab.items" v-if="editing"></nested-todo>-->
               <check-todo @finish-todo="finishTodo"
                           @update-order="updateOrder"
                           @todo-item-move="todoItemMove"
                           class="check-todo"
-                          :loadingItem="loadingItem" :tasks="tab.items"
-                          v-else></check-todo>
+                          :loadingItem="loadingItem" :tasks="tabChoosed.items"></check-todo>
             </v-col>
             <v-col cols="12" sm="3" class="todo__secondary" style="background-color: blue">1</v-col>
           </v-row>
@@ -129,28 +128,17 @@
       >
         <v-card-text style="padding-top: 10px">
           {{loadingText}}
-          <v-progress-linear
-            indeterminate
-            color="white"
-            class="mb-0"
+          <v-progress-linear indeterminate color="white" class="mb-0"
           ></v-progress-linear>
         </v-card-text>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="snackbar"
-      timeout="2000"
-    >
+    <v-snackbar v-model="snackbar" timeout="2000">
       <span class="text-h5">{{ snackbarText }}</span>
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="blue"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-          class="text-h5">
-          关闭
+        <v-btn color="blue" text v-bind="attrs" @click="snackbar = false"
+               class="text-h5">关闭
         </v-btn>
       </template>
     </v-snackbar>
@@ -213,6 +201,31 @@ export default {
     vm.loadTabs(vm.nowTabsId)
   },
   methods: {
+    loadTabs (id) {
+      let vm = this
+      // todo 每次都需要重载整个tab 有待优化
+      let data = {
+        tab_id: id
+      }
+      todo.todos.index(data).then(
+        (rsp) => {
+          if (id !== null) {
+            // 只更新操作的tab
+            vm.tabs.forEach((tab, index) => {
+              if (tab.id === id) Object.assign(vm.tabs[index], rsp.data.items[0])
+            })
+          } else {
+            vm.tabs = rsp.data.items
+          }
+        }
+      ).catch(() => {
+        vm.tabs = [
+          {id: 1, name: '默认', priority: 0}
+        ]
+        vm.snackbarText = '加载失败, 网络异常'
+        vm.snackbar = true
+      })
+    },
     updateOrder (element, order) {
       let vm = this
       let data = {
@@ -227,29 +240,6 @@ export default {
         vm.snackbar = true
       }).finally(() => {
         vm.loadTabs(vm.nowTabsId)
-      })
-    },
-    loadTabs (id) {
-      let vm = this
-      // todo 每次都需要重载整个tab 有待优化
-      let data = {
-        tab_id: id
-      }
-      todo.todos.index(data).then(
-        (rsp) => {
-          if (id !== null) {
-            // 只更新操作的tab
-            vm.tabs.forEach((tab, index) => {
-              if (tab.id === id) Object.assign(vm.tabs[index], rsp.data.items[0])
-            })
-          } else vm.tabs = rsp.data.items
-        }
-      ).catch(() => {
-        vm.tabs = [
-          {id: 1, name: '默认', priority: 0}
-        ]
-        vm.snackbarText = '加载失败, 网络异常'
-        vm.snackbar = true
       })
     },
     todoItemMove (id, move) {
@@ -360,7 +350,11 @@ export default {
     },
     nowTabsId () {
       let vm = this
-      return vm.tab ? vm.tabs[vm.tab].id : null
+      var index = null
+      if (vm.tab !== null) {
+        index = vm.tabs.length ? vm.tabs[vm.tab].id : null
+      } else index = null
+      return index
     }
   }
 }

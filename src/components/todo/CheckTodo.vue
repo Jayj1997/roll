@@ -1,34 +1,28 @@
 <template>
-  <v-list v-if="tasks.length">
-    <v-list-item v-for="(element, index) in tasks" :key="index">
+  <v-list v-if="reorderedTasks">
+    <v-list-item v-for="(element, index) in reorderedTasks" :key="index">
       <v-list-item-icon>
-          <v-icon @click="finishTodo(element)">
-            {{element.finish_at !== null ? 'fas fa-check' :
-            element.id !== loadingItem ? 'far fa-circle' :
-            'fas fa-circle-notch fa-spin'}}</v-icon>
+        <v-icon @click="finishTodo(element)">
+          {{element.finish_at !== null ? 'fas fa-check' :
+          element.id !== loadingItem ? 'far fa-circle' :
+          'fas fa-circle-notch fa-spin'}}</v-icon>
       </v-list-item-icon>
       <v-list-item-content style="flex: 2 1 !important;">
         <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"
-                            :class="element.order === 3 ? 'red--text' : element.order === 2 ? 'orange--text' : element.order === 1 ? 'blue--text' : ''"></v-list-item-title>
+                            :class="element.order === 3 ? 'red--text' :
+                             element.order === 2 ? 'orange--text' :
+                             element.order === 1 ? 'blue--text' :
+                             ''">
+        </v-list-item-title>
       </v-list-item-content>
-
       <v-spacer></v-spacer>
       <v-avatar class="card__avatar--left" left v-if="element.schedule">
         <v-icon>fas fa-clock</v-icon>
       </v-avatar>
-
-      <v-avatar class="card__avatar--left" left v-if="element.common">
-        <v-icon color="orange">fas fa-exclamation-circle</v-icon>
-      </v-avatar>
-
       <v-menu bottom left min-width="25rem">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            v-bind="attrs"
-            v-on="on"
-          >
-            <v-icon>fas fa-ellipsis-v</v-icon>
+          <v-btn icon v-bind="attrs" v-on="on">
+            <v-icon style="font-size: 1.5rem">fas fa-ellipsis-v</v-icon>
           </v-btn>
         </template>
         <v-card>
@@ -52,9 +46,9 @@
               <span style="color: grey;">设置截止日期</span>
             </v-card-title>
             <v-card-text style="background-color: #f5f5f5">
-              <div v-for="(schedule, index) in scheduleItem" :key="index" style="display: inline-block">
-                <v-btn elevation="0"
-                       @click="addSchedule(element, schedule.schedule)">
+              <div v-for="(schedule, index) in scheduleItem" :key="index"
+                   style="display: inline-block" @click="addSchedule(element, schedule.schedule)">
+                <v-btn elevation="0">
                   <v-icon :class="schedule.icon" :color="schedule.color" block>
                   </v-icon>
                 </v-btn>
@@ -65,21 +59,13 @@
                   index === 3 ? '自定义' : ''}}
                 </span>
               </div>
-<!--              <v-row style="text-align: center; margin-top: 3px">-->
-<!--                <v-col v-for="n in 4" :key="n" cols="3">-->
-<!--                  {{-->
-<!--                  n === 1 ? '明天' :-->
-<!--                  n === 2 ? '本周五' :-->
-<!--                  n === 3 ? '本周末' :-->
-<!--                  n === 4 ? '自定义' : ''-->
-<!--                  }}-->
-<!--                </v-col>-->
-<!--              </v-row>-->
             </v-card-text>
           </v-card-text>
         </v-card>
       </v-menu>
-
+      <v-list-item-icon v-if="element.subTasks">
+        <v-icon>fas fa-chevron-down</v-icon>
+      </v-list-item-icon>
     </v-list-item>
   </v-list>
   <div v-else>
@@ -101,6 +87,35 @@ export default {
       // 完成过程图标旋转
       required: true,
       type: Number
+    }
+  },
+  computed: {
+    reorderedTasks: function () {
+      let vm = this
+      let reorderedTasks = []
+      var taskCopy = Object.assign([], vm.tasks) // vm.tasks下不可在有object
+      vm.tasks.forEach((task, index) => {
+        // 循环tasks
+        if (task.sub) {
+          // 寻找存在sub的task
+          taskCopy.forEach((taskNew, newIndex) => {
+            // if (task.sub === 51 && taskNew.id === 51) {
+            //   console.log(task, taskNew)
+            // }
+            // 找到主task
+            if (task.sub === taskNew.id) {
+              if (!taskCopy[newIndex].subTasks) taskCopy[newIndex].subTasks = []
+              taskCopy[newIndex].subTasks.push(vm.tasks[index]) // 赋进去
+            }
+          })
+        }
+      })
+      taskCopy.forEach((task) => {
+        if (!task.sub || task.subTasks) {
+          reorderedTasks.push(task)
+        }
+      })
+      return reorderedTasks
     }
   },
   data () {
@@ -127,6 +142,25 @@ export default {
     }
   },
   methods: {
+    // reOrderTasks (tasks) {
+    //   let vm = this
+    //   vm.reorderedTasks = tasks
+    //   tasks.forEach((task, index) => {
+    //     // 循环tasks
+    //     if (task.sub) {
+    //       // 寻找存在sub的task
+    //       tasks.forEach((taskNew, newIndex) => {
+    //         // 找到主task
+    //         if (task.sub === taskNew.id) {
+    //           vm.reorderedTasks[newIndex]['subTasks'] = []
+    //           vm.reorderedTasks[newIndex]['subTasks'].push(tasks[index]) // 赋进去
+    //           vm.reorderedTasks.splice(index, 1) // 删除旧的
+    //         }
+    //       })
+    //     }
+    //   })
+    //   console.log(vm.reorderedTasks)
+    // },
     finishTodo (element) {
       this.$emit('finish-todo', element)
     },
