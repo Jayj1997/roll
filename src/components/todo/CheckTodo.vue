@@ -1,8 +1,8 @@
 <template>
-  <v-list v-if="reorderedTasks">
-    <v-list-item v-for="(element, index) in reorderedTasks" :key="index">
+  <v-list v-if="reorderedTask.length">
+    <v-list-item v-for="(element, index) in reorderedTask" :key="index">
       <v-list-item-icon>
-        <v-icon @click="finishTodo(element)">
+        <v-icon @click="finishTodo(element)" style="font-size: 2.5rem">
           {{element.finish_at !== null ? 'fas fa-check' :
           element.id !== loadingItem ? 'far fa-circle' :
           'fas fa-circle-notch fa-spin'}}</v-icon>
@@ -36,7 +36,7 @@
               <span style="color: grey;">设置优先级</span>
             </v-card-title>
             <v-card-text>
-              <v-btn v-for="(icon, index) in flagItem" :key="index" elevation="0"
+              <v-btn v-for="(icon, index2) in flagItem" :key="index2" elevation="0"
                      @click="updateOrder(element, icon.order)">
                 <v-icon :class="icon.icon" :color="icon.color" >
                 </v-icon>
@@ -46,7 +46,7 @@
               <span style="color: grey;">设置截止日期</span>
             </v-card-title>
             <v-card-text style="background-color: #f5f5f5">
-              <div v-for="(schedule, index) in scheduleItem" :key="index"
+              <div v-for="(schedule, index3) in scheduleItem" :key="index3"
                    style="display: inline-block" @click="addSchedule(element, schedule.schedule)">
                 <v-btn elevation="0">
                   <v-icon :class="schedule.icon" :color="schedule.color" block>
@@ -63,8 +63,9 @@
           </v-card-text>
         </v-card>
       </v-menu>
-      <v-list-item-icon v-if="element.subTasks">
-        <v-icon>fas fa-chevron-down</v-icon>
+      <v-list-item-icon v-if="element.subTasks" @click="expend(element, index)">
+        <v-icon v-if="element.id === expendId">fas fa-chevron-left fa-rotate-270</v-icon>
+        <v-icon v-else>fas fa-chevron-left</v-icon>
       </v-list-item-icon>
     </v-list-item>
   </v-list>
@@ -90,36 +91,48 @@ export default {
     }
   },
   computed: {
-    reorderedTasks: function () {
-      let vm = this
-      let reorderedTasks = []
-      var taskCopy = Object.assign([], vm.tasks) // vm.tasks下不可在有object
-      vm.tasks.forEach((task, index) => {
-        // 循环tasks
-        if (task.sub) {
-          // 寻找存在sub的task
-          taskCopy.forEach((taskNew, newIndex) => {
-            // if (task.sub === 51 && taskNew.id === 51) {
-            //   console.log(task, taskNew)
-            // }
-            // 找到主task
-            if (task.sub === taskNew.id) {
-              if (!taskCopy[newIndex].subTasks) taskCopy[newIndex].subTasks = []
-              taskCopy[newIndex].subTasks.push(vm.tasks[index]) // 赋进去
-            }
-          })
-        }
-      })
-      taskCopy.forEach((task) => {
-        if (!task.sub || task.subTasks) {
-          reorderedTasks.push(task)
-        }
-      })
-      return reorderedTasks
+    test: {
+      get: function () {
+        return ''
+      },
+      set: function () {
+
+      }
+    },
+    reorderedTask: {
+      get: function () {
+        let reorderedTasks = []
+        let vm = this
+        var taskCopy = Object.assign([], vm.tasks) // vm.tasks下不可在有object
+        vm.tasks.forEach((task, index) => {
+          // 循环tasks
+          if (task.sub) {
+            // 寻找存在sub的task
+            taskCopy.forEach((taskNew, newIndex) => {
+              // 找到主task
+              if (task.sub === taskNew.id) {
+                if (!taskCopy[newIndex].subTasks) taskCopy[newIndex].subTasks = []
+                taskCopy[newIndex].subTasks.push(vm.tasks[index]) // 赋进去
+              }
+            })
+          }
+        })
+        taskCopy.forEach((task) => {
+          if (!task.sub || task.subTasks) {
+            reorderedTasks.push(task)
+          }
+        })
+        vm.tasksCopy = reorderedTasks
+        return reorderedTasks
+      },
+      set: function (data) {
+      }
     }
   },
   data () {
     return {
+      tasksCopy: [],
+      expendId: 0,
       flagItem: [
         { icon: 'fas fa-flag', color: 'red', order: 3 },
         { icon: 'fas fa-flag', color: 'orange', order: 2 },
@@ -142,25 +155,15 @@ export default {
     }
   },
   methods: {
-    // reOrderTasks (tasks) {
-    //   let vm = this
-    //   vm.reorderedTasks = tasks
-    //   tasks.forEach((task, index) => {
-    //     // 循环tasks
-    //     if (task.sub) {
-    //       // 寻找存在sub的task
-    //       tasks.forEach((taskNew, newIndex) => {
-    //         // 找到主task
-    //         if (task.sub === taskNew.id) {
-    //           vm.reorderedTasks[newIndex]['subTasks'] = []
-    //           vm.reorderedTasks[newIndex]['subTasks'].push(tasks[index]) // 赋进去
-    //           vm.reorderedTasks.splice(index, 1) // 删除旧的
-    //         }
-    //       })
-    //     }
-    //   })
-    //   console.log(vm.reorderedTasks)
-    // },
+    expend (element, index) {
+      let vm = this
+      if (vm.expendId === element.id) {
+        vm.expendId = null
+      } else {
+        // 展开
+        vm.expendId = element.id
+      }
+    },
     finishTodo (element) {
       this.$emit('finish-todo', element)
     },
