@@ -1,17 +1,7 @@
 <template>
   <div class="todo">
-    <v-card class="todo__body"
-      elevation="15">
+    <v-card class="todo__body" elevation="15">
       <v-toolbar color="cyan" :src="bg" dark flat>
-<!--        <v-app-bar-nav-icon v-if="isPhone()">-->
-<!--          <v-avatar-->
-<!--            class="avatar__behind"-->
-<!--            height="40" width="40"-->
-<!--            @click="openDrawer()">-->
-<!--            <img src="~@/assets/images/navigator/icon-cat.png" alt="avatar">-->
-<!--          </v-avatar>-->
-<!--        </v-app-bar-nav-icon>-->
-
         <v-toolbar-title style="font-size: 1.7rem; font-weight: 600">{{todoTitle}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-dialog v-model="deleteTab" width="500">
@@ -26,7 +16,7 @@
               确定要删除该标签吗?
             </v-card-title>
 
-            <v-card-text style="margin-top: 15px">
+            <v-card-text style="margin-top: 15px; font-size: 1.3rem">
               删除标签是不可恢复的操作, 会一并删除该标签下的任务, 您的统计系统会减去被删除的任务重新计算.
             </v-card-text>
 
@@ -118,14 +108,8 @@
         </v-tab-item>
       </v-tabs-items>
     </v-card>
-    <v-dialog
-      v-model="loadingTab"
-      hide-overlay
-      persistent
-      width="300">
-      <v-card
-        color="primary"
-      >
+    <v-dialog v-model="loadingTab" hide-overlay persistent width="300">
+      <v-card color="primary">
         <v-card-text style="padding-top: 10px">
           {{loadingText}}
           <v-progress-linear indeterminate color="white" class="mb-0"

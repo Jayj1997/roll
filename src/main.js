@@ -7,11 +7,14 @@ import {store} from './store'
 import Vuetify from 'vuetify'
 import vuetify from './plugins/vuetify'
 import $ from 'jquery'
-import Axios from 'axios'
+import service from './methods/function/service'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
+Vue.prototype.$axios = service // 在vue文件直接this.$axios
+service.defaults.headers.common['Authorization'] = store.state.token
+service.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8'
+
 Vue.use(Vuetify)
-Axios.defaults.headers.common['Authorization'] = store.state.token
 Vue.config.productionTip = false
 
 // eslint-disable-next-line no-new

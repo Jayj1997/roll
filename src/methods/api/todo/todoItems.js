@@ -1,4 +1,4 @@
-import Axios from 'axios'
+import service from '../../function/service'
 
 const API_URL_TODOS_ITEMS_INDEX = '/api/todo/todo_items'
 const API_URL_TODOS_ITEMS_SHOW = '/api/todo/todo_items/'
@@ -8,22 +8,22 @@ const API_URL_TODOS_ITEMS_DELETE = '/api/todo/todo_items/'
 const API_URL_TODOS_ITEMS_UPDATEORDER = '/api/todo/todo_items/update_order/'
 
 function index () {
-  return Axios.get(API_URL_TODOS_ITEMS_INDEX)
+  return service.get(API_URL_TODOS_ITEMS_INDEX)
 }
 function show (id) {
-  return Axios.get(API_URL_TODOS_ITEMS_SHOW + id)
+  return service.get(API_URL_TODOS_ITEMS_SHOW + id)
 }
 function update (id) {
-  return Axios.patch(API_URL_TODOS_ITEMS_UPDATE + id)
+  return service.patch(API_URL_TODOS_ITEMS_UPDATE + id)
 }
 function store (data) {
-  return Axios.post(API_URL_TODOS_ITEMS_CREATE, data)
+  return service.post(API_URL_TODOS_ITEMS_CREATE, data)
 }
 function deleteItem (id) {
-  return Axios.delete(API_URL_TODOS_ITEMS_DELETE + id)
+  return service.delete(API_URL_TODOS_ITEMS_DELETE + id)
 }
 function updateOrder (id, data) {
-  return Axios.patch(API_URL_TODOS_ITEMS_UPDATEORDER + id, data)
+  return service.patch(API_URL_TODOS_ITEMS_UPDATEORDER + id, data)
 }
 
 export default {

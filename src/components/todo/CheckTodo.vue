@@ -1,73 +1,141 @@
 <template>
-  <v-list v-if="reorderedTask.length">
-    <v-list-item v-for="(element, index) in reorderedTask" :key="index">
-      <v-list-item-icon>
-        <v-icon @click="finishTodo(element)" style="font-size: 2.5rem">
-          {{element.finish_at !== null ? 'fas fa-check' :
-          element.id !== loadingItem ? 'far fa-circle' :
-          'fas fa-circle-notch fa-spin'}}</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content style="flex: 2 1 !important;">
-        <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"
-                            :class="element.order === 3 ? 'red--text' :
+  <v-list v-if="tasks.length">
+    <div class="todo-items" v-for="(element, index) in tasks" :key="index" v-if="!element.sub">
+<!--      这里写的也太蠢了 有时间封装一下-->
+      <v-list-item>
+        <v-list-item-icon>
+          <v-icon @click="finishTodo(element)" :class="expendId === element.id ? 'blue--text' : ''" style="font-size: 2.5rem">
+            {{element.finish_at !== null ? 'fas fa-check' :
+            element.id !== loadingItem ? 'far fa-circle' :
+            'fas fa-circle-notch fa-spin'}}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content style="flex: 2 1 !important;">
+          <v-list-item-title  style="font-size: 1.3rem" v-text="element.name"
+                              :class="element.order === 3 ? 'red--text' :
                              element.order === 2 ? 'orange--text' :
                              element.order === 1 ? 'blue--text' :
                              ''">
-        </v-list-item-title>
-      </v-list-item-content>
-      <v-spacer></v-spacer>
-      <v-avatar class="card__avatar--left" left v-if="element.schedule">
-        <v-icon>fas fa-clock</v-icon>
-      </v-avatar>
-      <v-menu bottom left min-width="25rem">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon style="font-size: 1.5rem">fas fa-ellipsis-v</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-text style="padding: 1rem; cursor: pointer" v-for="item in todoItem" :key="item.title" @click="todoItemMove(element, item)">
-            <v-icon style="margin-right: 1rem">{{item.icon}}</v-icon>
-            <span style="font-size: 1rem">{{item.title}}</span>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-text style="padding: 10px; background-color: #f5f5f5">
-            <v-card-title style="">
-              <span style="color: grey;">设置优先级</span>
-            </v-card-title>
-            <v-card-text>
-              <v-btn v-for="(icon, index2) in flagItem" :key="index2" elevation="0"
-                     @click="updateOrder(element, icon.order)">
-                <v-icon :class="icon.icon" :color="icon.color" >
-                </v-icon>
-              </v-btn>
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-spacer></v-spacer>
+        <v-menu bottom left min-width="25rem">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon style="font-size: 1.5rem" :class="expendId === element.id ? 'blue--text' : ''">fas fa-ellipsis-v</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text style="padding: 1rem; cursor: pointer" v-for="item in todoItem" :key="item.title" @click="todoItemMove(element, item)">
+              <v-icon style="margin-right: 1rem">{{item.icon}}</v-icon>
+              <span style="font-size: 1rem">{{item.title}}</span>
             </v-card-text>
-            <v-card-title style="background-color: #f5f5f5">
-              <span style="color: grey;">设置截止日期</span>
-            </v-card-title>
-            <v-card-text style="background-color: #f5f5f5">
-              <div v-for="(schedule, index3) in scheduleItem" :key="index3"
-                   style="display: inline-block" @click="addSchedule(element, schedule.schedule)">
-                <v-btn elevation="0">
-                  <v-icon :class="schedule.icon" :color="schedule.color" block>
+            <v-divider></v-divider>
+            <v-card-text style="padding: 10px; background-color: #f5f5f5">
+              <v-card-title style="">
+                <span style="color: grey;">设置优先级</span>
+              </v-card-title>
+              <v-card-text>
+                <v-btn v-for="(icon, index2) in flagItem" :key="index2" elevation="0"
+                       @click="updateOrder(element, icon.order)">
+                  <v-icon :class="icon.icon" :color="icon.color" >
                   </v-icon>
                 </v-btn>
-                <span style="display: block; text-align: center">
-                  {{index === 0 ? '明天' :
-                  index === 1 ? '周五' :
-                  index === 2 ? '周末' :
-                  index === 3 ? '自定义' : ''}}
+              </v-card-text>
+              <v-card-title style="background-color: #f5f5f5">
+                <span style="color: grey;">设置截止日期</span>
+              </v-card-title>
+              <v-card-text style="background-color: #f5f5f5">
+                <div v-for="(schedule, index3) in scheduleItem" :key="index3"
+                     style="display: inline-block" @click="addSchedule(element, schedule.schedule)">
+                  <v-btn elevation="0">
+                    <v-icon :class="schedule.icon" :color="schedule.color" block>
+                    </v-icon>
+                  </v-btn>
+                  <span style="display: block; text-align: center">
+                  {{index3 === 0 ? '明天' :
+                  index3 === 1 ? '周五' :
+                  index3 === 2 ? '周末' :
+                  index3 === 3 ? '自定义' : ''}}
                 </span>
-              </div>
+                </div>
+              </v-card-text>
             </v-card-text>
-          </v-card-text>
-        </v-card>
-      </v-menu>
-      <v-list-item-icon v-if="element.subTasks" @click="expend(element, index)">
-        <v-icon v-if="element.id === expendId">fas fa-chevron-left fa-rotate-270</v-icon>
-        <v-icon v-else>fas fa-chevron-left</v-icon>
-      </v-list-item-icon>
-    </v-list-item>
+          </v-card>
+        </v-menu>
+        <v-list-item-icon v-if="!element.sub" @click="expend(element, index)">
+          <v-icon :class="expendId === element.id ? 'blue--text' : ''">{{element.id === expendId ? 'fas fa-chevron-left fa-rotate-270' : 'fas fa-chevron-left'}}</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
+
+      <v-list-item style="margin-left: 3rem" class="sub-todo-items" v-if="expendId === element.id" v-for="(element2, indexItem) in expendItems"
+                   :key="indexItem">
+        <v-list-item-icon>
+          <v-icon @click="finishTodo(element2)" style="font-size: 2.5rem">
+            {{element2.finish_at !== null ? 'fas fa-check' :
+            element2.id !== loadingItem ? 'far fa-circle' :
+            'fas fa-circle-notch fa-spin'}}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content style="flex: 2 1 !important;">
+          <v-list-item-title  style="font-size: 1.3rem" v-text="element2.name"
+                              :class="element2.order === 3 ? 'red--text' :
+                             element2.order === 2 ? 'orange--text' :
+                             element2.order === 1 ? 'blue--text' :
+                             ''">
+          </v-list-item-title>
+        </v-list-item-content>
+        <v-spacer></v-spacer>
+        <v-avatar class="card__avatar--left" left v-if="element2.schedule">
+          <v-icon>fas fa-clock</v-icon>
+        </v-avatar>
+        <v-menu bottom left min-width="25rem">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon style="font-size: 1.5rem">fas fa-ellipsis-v</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text style="padding: 1rem; cursor: pointer" v-for="item in todoItem" :key="item.title" @click="todoItemMove(element2, item)">
+              <v-icon style="margin-right: 1rem">{{item.icon}}</v-icon>
+              <span style="font-size: 1rem">{{item.title}}</span>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text style="padding: 10px; background-color: #f5f5f5">
+              <v-card-title style="">
+                <span style="color: grey;">设置优先级</span>
+              </v-card-title>
+              <v-card-text>
+                <v-btn v-for="(icon, index2) in flagItem" :key="index2" elevation="0"
+                       @click="updateOrder(element2, icon.order)">
+                  <v-icon :class="icon.icon" :color="icon.color" >
+                  </v-icon>
+                </v-btn>
+              </v-card-text>
+              <v-card-title style="background-color: #f5f5f5">
+                <span style="color: grey;">设置截止日期</span>
+              </v-card-title>
+              <v-card-text style="background-color: #f5f5f5">
+                <div v-for="(schedule, index3) in scheduleItem" :key="index3"
+                     style="display: inline-block" @click="addSchedule(element2, schedule.schedule)">
+                  <v-btn elevation="0">
+                    <v-icon :class="schedule.icon" :color="schedule.color" block>
+                    </v-icon>
+                  </v-btn>
+                  <span style="display: block; text-align: center">
+                  {{indexItem === 0 ? '明天' :
+                  indexItem === 1 ? '周五' :
+                  indexItem === 2 ? '周末' :
+                  indexItem === 3 ? '自定义' : ''}}
+                </span>
+                </div>
+              </v-card-text>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <v-list-item-icon v-if="!element2.sub" @click="expend(element2, indexItem)">
+          <v-icon>{{element2.id === expendId ? 'fas fa-chevron-left fa-rotate-270' : 'fas fa-chevron-left'}}</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
+    </div>
   </v-list>
   <div v-else>
     <span style="font-size: 2rem; text-align: center;
@@ -91,41 +159,19 @@ export default {
     }
   },
   computed: {
-    test: {
+    expendItems: {
       get: function () {
-        return ''
+        let vm = this
+        let items = []
+        vm.tasks.forEach((task) => {
+          if (task.sub === vm.expendId) {
+            items.push(task)
+          }
+        })
+        return items
       },
       set: function () {
 
-      }
-    },
-    reorderedTask: {
-      get: function () {
-        let reorderedTasks = []
-        let vm = this
-        var taskCopy = Object.assign([], vm.tasks) // vm.tasks下不可在有object
-        vm.tasks.forEach((task, index) => {
-          // 循环tasks
-          if (task.sub) {
-            // 寻找存在sub的task
-            taskCopy.forEach((taskNew, newIndex) => {
-              // 找到主task
-              if (task.sub === taskNew.id) {
-                if (!taskCopy[newIndex].subTasks) taskCopy[newIndex].subTasks = []
-                taskCopy[newIndex].subTasks.push(vm.tasks[index]) // 赋进去
-              }
-            })
-          }
-        })
-        taskCopy.forEach((task) => {
-          if (!task.sub || task.subTasks) {
-            reorderedTasks.push(task)
-          }
-        })
-        vm.tasksCopy = reorderedTasks
-        return reorderedTasks
-      },
-      set: function (data) {
       }
     }
   },
