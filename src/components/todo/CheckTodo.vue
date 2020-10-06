@@ -1,6 +1,6 @@
 <template>
   <v-list v-if="tasks.length">
-    <div class="todo-items" v-for="(element, index) in tasks" :key="index" v-if="!element.sub">
+    <div class="todo-items" v-for="(element, index) in tasks" :key="index" v-if="!element.sub && !element.finish_at">
 <!--      这里写的也太蠢了 有时间封装一下-->
       <v-list-item>
         <v-list-item-icon>
@@ -165,7 +165,7 @@ export default {
         let items = []
         vm.tasks.forEach((task) => {
           if (task.sub === vm.expendId) {
-            items.push(task)
+            task.finish_at ? items.push(task) : items.unshift(task)
           }
         })
         return items
@@ -192,8 +192,8 @@ export default {
         { icon: 'fas fa-ellipsis-h', color: '', schedule: 'more' }
       ],
       todoItem: [
-        { title: '编辑', move: 'edit', icon: 'far fa-edit', important: 3 },
-        { title: '添加子任务', move: 'addSub', icon: 'fas fa-plus', important: 2 },
+        { title: '编辑', move: 'edit', icon: 'far fa-edit' },
+        { title: '添加子任务', move: 'addSub', icon: 'fas fa-plus' },
         { title: '复制此项目', move: 'duplicate', icon: 'far fa-copy' },
         { title: '移至其他项目', move: 'moveTo', icon: 'fas fa-external-link-alt' },
         { title: '删除', move: 'delete', icon: 'far fa-trash-alt' }
@@ -214,7 +214,7 @@ export default {
       this.$emit('finish-todo', element)
     },
     todoItemMove (element, item) {
-      this.$emit('todo-item-move', element.id, item.move)
+      this.$emit('todo-item-move', element, item.move)
     },
     updateOrder (element, order) {
       this.$emit('update-order', element, order)

@@ -1,45 +1,12 @@
 <template>
-  <v-card class="mx-auto" width="300">
-    <v-list>
-      <v-list-group :value="true">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on">
-            <v-icon>
-              fas fa-check
-            </v-icon>
-          </v-btn>
-<!--          <v-list-item-icon>-->
-<!--            <v-icon>fas fa-circle</v-icon>-->
-<!--          </v-list-item-icon>-->
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title>-->
-<!--              党建模块-->
-<!--            </v-list-item-title>-->
-<!--          </v-list-item-content>-->
-        </template>
-        <v-list-group :value="true" no-action sub-group>
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title>用户</v-list-item-title>
-            </v-list-item-content>
-          </template>
-          <v-list-item v-for="([title, icon], i) in admins" :key="i" link>
-            <v-list-item-title v-text="title"></v-list-item-title>
-<!--            <v-list-item-icon>-->
-<!--              <v-icon v-text="icon"></v-icon>-->
-<!--            </v-list-item-icon>-->
-          </v-list-item>
-        </v-list-group>
-      </v-list-group>
-    </v-list>
-  </v-card>
+  <todo-sparkline></todo-sparkline>
 </template>
 <script>
-import NestedTodo from '../components/todo/NestedTodo'
+import TodoSparkline from '../components/todo/TodoSparkline'
 export default {
   name: 'test',
   components: {
-    NestedTodo
+    TodoSparkline
   },
   data () {
     return {

@@ -1,7 +1,7 @@
 <template>
   <div class="todo">
     <v-card class="todo__body" elevation="15">
-      <v-toolbar color="cyan" :src="bg" dark flat>
+      <v-toolbar color="cyan" class="todo__body--background" dark flat>
         <v-toolbar-title style="font-size: 1.7rem; font-weight: 600">{{todoTitle}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-dialog v-model="deleteTab" width="500">
@@ -94,8 +94,8 @@
       <v-tabs-items v-model="tab" touchless>
         <v-tab-item v-for="(tabChoosed, index) in tabs" :key="index">
           <v-row no-gutters>
-            <v-col cols="12" sm="9" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
-              <input-task @add-new-todo="addTodo" :todo_id="tabChoosed.id"></input-task>
+            <v-col cols="12" sm="7" md="8" class="todo__primary" style="height: calc(100vh - 112px - 6px);">
+              <input-task @add-new-todo="addTodo" @close_sub="subItem = {}" :todo_id="tabChoosed.id" :sub_item="subItem"></input-task>
 <!--              <nested-todo class="nested-todo" :tasks="tab.items" v-if="editing"></nested-todo>-->
               <check-todo @finish-todo="finishTodo"
                           @update-order="updateOrder"
@@ -103,7 +103,9 @@
                           class="check-todo"
                           :loadingItem="loadingItem" :tasks="tabChoosed.items"></check-todo>
             </v-col>
-            <v-col cols="12" sm="3" class="todo__secondary" style="background-color: blue">1</v-col>
+            <v-col cols="12" sm="5" md="4" class="todo__secondary">
+              <todo-sparkline :items="tabChoosed.items"></todo-sparkline>
+            </v-col>
           </v-row>
         </v-tab-item>
       </v-tabs-items>
@@ -136,6 +138,7 @@ import draggable from 'vuedraggable'
 import NestedTodo from '@/components/todo/NestedTodo'
 import InputTask from '@/components/todo/InputTask'
 import CheckTodo from '@/components/todo/CheckTodo'
+import TodoSparkline from '@/components/todo/TodoSparkline'
 
 export default {
   name: 'Todo',
@@ -144,10 +147,12 @@ export default {
     draggable,
     NestedTodo,
     InputTask,
-    CheckTodo
+    CheckTodo,
+    TodoSparkline
   },
   data () {
     return {
+      subItem: {},
       drag: false,
       valid: false,
       todoTitle: '任务',
@@ -226,11 +231,11 @@ export default {
         vm.loadTabs(vm.nowTabsId)
       })
     },
-    todoItemMove (id, move) {
+    todoItemMove (item, move) {
       let vm = this
       if (move === 'delete') {
         // 删除Item
-        todo.todoItems.deleteItem(id).then((rsp) => {
+        todo.todoItems.deleteItem(item.id).then((rsp) => {
           vm.snackbarText = rsp.data.msg
           vm.snackbar = true
         }).catch((e) => {
@@ -239,6 +244,8 @@ export default {
         }).finally(() => {
           vm.loadTabs(vm.nowTabsId)
         })
+      } else if (move === 'addSub') {
+        this.subItem = item
       }
     },
     addTodo (data) { // 添加todoItem
@@ -254,6 +261,9 @@ export default {
       }).finally(() => {
         vm.loadTabs(vm.nowTabsId)
       })
+    },
+    addSub (item) {
+      this.subItem = item
     },
     finishTodo (item) { // 完成todoItem
       let vm = this
@@ -355,6 +365,11 @@ export default {
     &__body {
       margin: 3px;
       height: calc(100vh - 6px);
+
+      &--background {
+        background: #333333;  /* fallback for old browsers */
+        background: linear-gradient(to right, #dd1818, #333333); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
     }
   }
 </style>
