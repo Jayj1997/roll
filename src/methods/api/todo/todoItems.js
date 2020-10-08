@@ -5,7 +5,8 @@ const API_URL_TODOS_ITEMS_SHOW = '/api/todo/todo_items/'
 const API_URL_TODOS_ITEMS_UPDATE = '/api/todo/todo_items/'
 const API_URL_TODOS_ITEMS_CREATE = '/api/todo/todo_items'
 const API_URL_TODOS_ITEMS_DELETE = '/api/todo/todo_items/'
-const API_URL_TODOS_ITEMS_UPDATEORDER = '/api/todo/todo_items/update_order/'
+const API_URL_TODOS_ITEMS_UPDATE_ORDER = '/api/todo/todo_items/update_order/'
+const API_URL_TODOS_ITEMS_UPDATE_ITEM_NAME = '/api/todo/todo_items/update_item_name/'
 
 function index () {
   return service.get(API_URL_TODOS_ITEMS_INDEX)
@@ -23,7 +24,10 @@ function deleteItem (id) {
   return service.delete(API_URL_TODOS_ITEMS_DELETE + id)
 }
 function updateOrder (id, data) {
-  return service.patch(API_URL_TODOS_ITEMS_UPDATEORDER + id, data)
+  return service.patch(API_URL_TODOS_ITEMS_UPDATE_ORDER + id, data)
+}
+function changeItemName (id, data) {
+  return service.patch(API_URL_TODOS_ITEMS_UPDATE_ITEM_NAME + id, data)
 }
 
 export default {
@@ -32,5 +36,6 @@ export default {
   update,
   store,
   deleteItem,
-  updateOrder
+  updateOrder,
+  changeItemName
 }

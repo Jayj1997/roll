@@ -77,7 +77,6 @@
           <v-tabs
             v-model="tab"
             center-active
-            fixed-tabs
             show-arrows
             next-icon="fas fa-arrow-right"
             prev-icon="fas fa-arrow-left"
@@ -100,11 +99,14 @@
               <check-todo @finish-todo="finishTodo"
                           @update-order="updateOrder"
                           @todo-item-move="todoItemMove"
-                          class="check-todo"
+                          @change-item-name="changeItemName"
+                          class="check-todo content"
                           :loadingItem="loadingItem" :tasks="tabChoosed.items"></check-todo>
             </v-col>
             <v-col cols="12" sm="5" md="4" class="todo__secondary">
               <todo-sparkline :items="tabChoosed.items"></todo-sparkline>
+              <progress-circular :items="tabChoosed.items"></progress-circular>
+<!--              <todo-history :items="tabChoosed.items"></todo-history>-->
             </v-col>
           </v-row>
         </v-tab-item>
@@ -114,8 +116,8 @@
       <v-card color="primary">
         <v-card-text style="padding-top: 10px">
           {{loadingText}}
-          <v-progress-linear indeterminate color="white" class="mb-0"
-          ></v-progress-linear>
+          <v-progress-linear indeterminate color="white" class="mb-0">
+          </v-progress-linear>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -139,16 +141,19 @@ import NestedTodo from '@/components/todo/NestedTodo'
 import InputTask from '@/components/todo/InputTask'
 import CheckTodo from '@/components/todo/CheckTodo'
 import TodoSparkline from '@/components/todo/TodoSparkline'
-
+import ProgressCircular from '@/components/todo/ProgressCircular'
+// import TodoHistory from '@/components/todo/TodoHistory'
 export default {
   name: 'Todo',
   inject: ['reload'],
   components: {
+    ProgressCircular,
     draggable,
     NestedTodo,
     InputTask,
     CheckTodo,
     TodoSparkline
+    // TodoHistory
   },
   data () {
     return {
@@ -181,39 +186,55 @@ export default {
     }
   },
   mounted () {
-    let vm = this
     // 左滑弹出tab 阻止页面后退
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function () {
       history.pushState(null, null, document.URL)
     })
+  },
+  created () {
+    let vm = this
     vm.loadTabs(vm.nowTabsId)
   },
   methods: {
     loadTabs (id) {
       let vm = this
       // todo 每次都需要重载整个tab 有待优化
-      let data = {
-        tab_id: id
-      }
-      todo.todos.index(data).then(
-        (rsp) => {
-          if (id !== null) {
-            // 只更新操作的tab
-            vm.tabs.forEach((tab, index) => {
-              if (tab.id === id) Object.assign(vm.tabs[index], rsp.data.items[0])
-            })
-          } else {
-            vm.tabs = rsp.data.items
-          }
+      let data = { tab_id: id }
+      todo.todos.index(data).then((rsp) => {
+        if (id !== null) {
+          // 只更新操作的tab
+          vm.tabs.forEach((tab, index) => {
+            if (tab.id === id) Object.assign(vm.tabs[index], rsp.data.items[0])
+          })
+        } else {
+          vm.tabs = rsp.data.items
         }
-      ).catch(() => {
+      }).catch(() => {
         vm.tabs = [
           {id: 1, name: '默认', priority: 0}
         ]
         vm.snackbarText = '加载失败, 网络异常'
         vm.snackbar = true
       })
+    },
+    changeItemName (element, newName) {
+      let vm = this
+      if (newName === '' || newName === undefined) {
+        vm.snackbarText = '不可以修改为空哦'
+        vm.snackbar = true
+      } else {
+        let data = {
+          name: newName
+        }
+        todo.todoItems.changeItemName(element.id, data).then(() => {
+          vm.snackbarText = '修改成功'
+          vm.snackbar = true
+        }).catch(() => {
+          vm.snackbarText = '网络异常, 修改失败'
+          vm.snackbar = true
+        })
+      }
     },
     updateOrder (element, order) {
       let vm = this
@@ -300,7 +321,7 @@ export default {
           vm.tabName = ''
           vm.tabPriority = 1
           vm.tabLabel = ''
-          vm.loadTabs(vm.nowTabsId)
+          vm.loadTabs(null)
         })
       }
     },

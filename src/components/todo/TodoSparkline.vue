@@ -19,7 +19,7 @@
     </v-card-text>
     <v-card-text style="padding: 1rem">
       <div class="display-1 font-weight-thin" style="font-size: 1.4rem!important;">
-        本周完成情况
+        本周完成度
       </div>
     </v-card-text>
   </v-card>
