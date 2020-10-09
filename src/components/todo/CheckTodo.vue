@@ -192,9 +192,7 @@ export default {
   created () {
     let vm = this
     vm.$nextTick(() => {
-      vm.scroll = new BScroll(vm.$refs.wrapper, {
-        click: true
-      })
+      vm.scroll = new BScroll(vm.$refs.wrapper, {click: true})
     })
   },
   watch: {
@@ -202,9 +200,7 @@ export default {
       let vm = this
       vm.$nextTick(() => {
         if (!vm.scroll) {
-          vm.scroll = new BScroll(vm.$refs.wrapper, {
-            click: true
-          })
+          vm.scroll = new BScroll(vm.$refs.wrapper, {click: true})
           vm.scroll.on('touchEnd', (pos) => {
             if (pos.y > 50) {
               vm.loadTabs(vm.nowTabsId)

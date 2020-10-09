@@ -3,7 +3,7 @@
     style="margin: 1rem"
     v-model="newTask"
     label="准备做点什么?"
-    solo hide-details autofocus
+    solo hide-details
     :append-icon="newTask ? 'fas fa-cloud' : ''"
     @click:append="addTodo"
     @keydown.enter="addTodo"
