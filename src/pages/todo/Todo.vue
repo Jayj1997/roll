@@ -64,7 +64,7 @@
                   </v-row>
                 </v-form>
               </v-container>
-              <small>带*为必填项</small>
+              <span style="color: red; font-size: 1.1rem">带*为必填项</span>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -130,6 +130,35 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog v-model="moveToTab" persistent max-width="600px">
+      <v-card>
+        <v-card-title style="margin-bottom: 15px">
+          <span class="headline">移至其他项目</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-row>
+                <v-col cols="12" style="margin-top: 15px">
+                  <v-autocomplete
+                    :items=moveTabLabels
+                    label="项目表"
+                    v-model="tabLabel"
+                    item-text="name"
+                    item-value="id"></v-autocomplete>
+                </v-col>
+              </v-row>
+            </v-form>
+            <span style="color: #ff0000; font-size: 1.1rem">将会一起迁移子任务(如果有)</span>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text style="font-size: 1.4rem" @click="moveToTab = false">取消</v-btn>
+          <v-btn color="success darken-1" style="font-size: 1.4rem" text @click="moveTo()">保存</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -165,13 +194,16 @@ export default {
       tab: null, // 选中页面的index
       addTab: false, // 添加页面
       deleteTab: false, // 删除页面
-      loadingTab: false, // 加载页面,
+      loadingTab: false, // 加载页面
+      moveToTab: false, // 移至其他页面
       snackbar: false,
       snackbarText: '',
       tabName: '',
       tabPriority: 1,
       tabLabel: '',
       tabLabels: ['', '工作', '计划', '兴趣', '健身', '其它'],
+      moveTabLabels: [],
+      moveTabId: null,
       nameRules: [
         v => !!v || '',
         v => v.length < 9 || ''
@@ -266,7 +298,13 @@ export default {
           vm.loadTabs(vm.nowTabsId)
         })
       } else if (move === 'addSub') {
-        this.subItem = item
+        vm.subItem = item
+      } else if (move === 'moveTo') {
+        vm.moveTabId = item.id
+        vm.tabs.forEach((tab) => {
+          if (tab.id !== item.todo_id) vm.moveTabLabels.push(tab)
+        })
+        vm.moveToTab = true
       }
     },
     addTodo (data) { // 添加todoItem
@@ -348,6 +386,24 @@ export default {
         }).finally(() => {
           vm.loadingTab = false
         })
+    },
+    moveTo () {
+      let vm = this
+      let data = {
+        toTabId: vm.tabLabel
+      }
+      console.log(vm.tabLabel, vm.moveTabId, vm.moveToTab)
+      vm.moveToTab = []
+      vm.tabLabel = ''
+      todo.todoItems.moveTo(vm.moveTabId, data).then((rsp) => {
+        vm.snackbarText = rsp.data.msg
+        vm.snackbar = true
+        vm.moveToTab = false
+        vm.loadTabs(null)
+      }).catch((e) => {
+        vm.snackbarText = e.response.data.error
+        vm.snackbar = true
+      })
     }
   },
   computed: {

@@ -7,6 +7,7 @@ const API_URL_TODOS_ITEMS_CREATE = '/api/todo/todo_items'
 const API_URL_TODOS_ITEMS_DELETE = '/api/todo/todo_items/'
 const API_URL_TODOS_ITEMS_UPDATE_ORDER = '/api/todo/todo_items/update_order/'
 const API_URL_TODOS_ITEMS_UPDATE_ITEM_NAME = '/api/todo/todo_items/update_item_name/'
+const API_URL_TODOS_ITEMS_MOVE_TO = '/api/todo/todo_items/move_to/'
 
 function index () {
   return service.get(API_URL_TODOS_ITEMS_INDEX)
@@ -29,6 +30,9 @@ function updateOrder (id, data) {
 function changeItemName (id, data) {
   return service.patch(API_URL_TODOS_ITEMS_UPDATE_ITEM_NAME + id, data)
 }
+function moveTo (id, data) {
+  return service.patch(API_URL_TODOS_ITEMS_MOVE_TO + id, data)
+}
 
 export default {
   index,
@@ -37,5 +41,6 @@ export default {
   store,
   deleteItem,
   updateOrder,
-  changeItemName
+  changeItemName,
+  moveTo
 }

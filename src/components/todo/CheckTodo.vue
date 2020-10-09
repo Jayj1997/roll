@@ -1,7 +1,7 @@
 <template>
   <v-list v-if="tasks.length">
     <div class="wrapper" ref="wrapper"
-         style="height: calc(100vh - 48px - 112px - 6px); overflow: hidden">
+         style="overflow: hidden; height: calc(100vh - 112px - 68px - 6px);">
       <div class="content" style="width: 100%">
         <div class="todo-items content" v-for="(element, index) in tasks"
              style="overflow: hidden"
@@ -176,6 +176,7 @@
 
 <script>
 import BScroll from 'better-scroll'
+
 export default {
   name: 'CheckTodo',
   props: {
@@ -191,14 +192,13 @@ export default {
   created () {
     let vm = this
     vm.$nextTick(() => {
-      console.log(vm.$refs.wrapper)
       vm.scroll = new BScroll(vm.$refs.wrapper, {})
     })
   },
   watch: {
-    tasks: () => {
+    tasks () {
       let vm = this
-      vm.nextTick(() => {
+      vm.$nextTick(() => {
         if (!vm.scroll) {
           vm.scroll = new BScroll(vm.$refs.wrapper, {})
           vm.scroll.on('touchEnd', (pos) => {
