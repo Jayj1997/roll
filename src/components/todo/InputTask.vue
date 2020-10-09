@@ -3,12 +3,11 @@
     style="margin: 1rem"
     v-model="newTask"
     label="准备做点什么?"
-    solo hide-details
+    solo hide-details autofocus
     :append-icon="newTask ? 'fas fa-cloud' : ''"
     @click:append="addTodo"
     @keydown.enter="addTodo"
-    @keyup.enter="addTodo"
-  >
+    @keyup.enter="addTodo">
     <template v-slot:prepend-inner v-if="sub_item.id">
       <div class="sub-label">
         <span class="sub-label__text">{{sub_item.name}}</span>

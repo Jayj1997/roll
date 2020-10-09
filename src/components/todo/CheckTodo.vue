@@ -26,7 +26,7 @@
                 v-model="newTaskName"
                 dense
                 label="准备做点什么?"
-                solo hide-details
+                solo hide-details autofocus
                 append-icon="fas fa-cloud"
                 @click:append="changeItemName(element)"
                 @keydown.enter="changeItemName(element)"
@@ -103,7 +103,7 @@
                 v-model="newTaskName"
                 dense
                 label="准备做点什么?"
-                solo hide-details
+                solo hide-details autofocus
                 append-icon="fas fa-cloud"
                 @click:append="changeItemName(element2)"
                 @keydown.enter="changeItemName(element2)"
@@ -192,7 +192,9 @@ export default {
   created () {
     let vm = this
     vm.$nextTick(() => {
-      vm.scroll = new BScroll(vm.$refs.wrapper, {})
+      vm.scroll = new BScroll(vm.$refs.wrapper, {
+        click: true
+      })
     })
   },
   watch: {
@@ -200,7 +202,9 @@ export default {
       let vm = this
       vm.$nextTick(() => {
         if (!vm.scroll) {
-          vm.scroll = new BScroll(vm.$refs.wrapper, {})
+          vm.scroll = new BScroll(vm.$refs.wrapper, {
+            click: true
+          })
           vm.scroll.on('touchEnd', (pos) => {
             if (pos.y > 50) {
               vm.loadTabs(vm.nowTabsId)
