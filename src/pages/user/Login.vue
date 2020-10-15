@@ -22,6 +22,7 @@
                       :loading="loadingPassword" @focus="loadingPassword = !loadingPassword"
                       style="font-size: 1.6rem; margin: 0 auto;" validate-on-blur
                       required></v-text-field>
+        <div class="footer">忘记密码？<a @click="toForget" style="color: #4040b1;">点击找回&rarr;</a></div>
       </v-form>
     </template>
     <template v-slot:buttons>
@@ -32,9 +33,10 @@
         class="primary sign-in__body--commit"
         @click="login"
       >登陆<v-icon right dark>fab fa-earlybirds</v-icon></v-btn>
+      <div class="footer" style="margin-top: 1rem">新来的？<a @click="toLogin" :style="$color-primary">去注册&rarr;</a></div>
     </template>
     <template v-slot:footer>
-      忘记密码？<a @click="toForget" class="footer">点击找回&rarr;</a>
+      <a href="http://beian.miit.gov.cn/" style="text-decoration: none">冀ICP备2020025006号-1</a>
     </template>
   </account>
 </template>
@@ -113,6 +115,9 @@ export default {
     },
     toForget () {
       this.$router.push({ name: 'Forget' })
+    },
+    toLogin () {
+      this.$router.push({ name: 'Register' })
     }
   }
 }
@@ -133,6 +138,7 @@ export default {
   .footer {
     text-decoration: none;
     font-size: 1.2rem;
-    color: $color-primary;
+    justify-content: center;
+    text-align: center;
   }
 </style>

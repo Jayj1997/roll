@@ -71,6 +71,7 @@
                             style="font-size: 1.6rem; margin: 0 auto;" validate-on-blur
                             required></v-text-field>
             </v-form>
+            <div class="footer">已经加入我们了？<a @click="toLogin" style="color: #4040b1;">点击登录&rarr;</a></div>
           </div>
         </div>
         <div class="sign-in__body">
@@ -191,6 +192,13 @@ export default {
 
   .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
     background-color: #1976d2 !important;
+  }
+
+  .footer {
+    text-decoration: none;
+    font-size: 1.2rem;
+    justify-content: center;
+    text-align: center;
   }
 
   .theme--light.v-btn.v-btn--disabled {
